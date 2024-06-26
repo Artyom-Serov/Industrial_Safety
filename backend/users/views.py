@@ -2,19 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import CustomUserCreationForm, CustomUserEditForm
+from .models import User
 
 
 def login_view(request):
     template = 'users/login.html'
+    organizations = User.objects.values_list(
+        'organization', flat=True
+    ).distinct()
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        organization = request.POST['organization']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('profile')
-    return render(request, template)
+        organization = request.POST.get('organization', '')
+        if username and password and organization:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('profile')
+    context = {
+        'organizations': organizations,
+    }
+    return render(request, template, context)
 
 
 @login_required
