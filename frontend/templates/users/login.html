@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-<form method="POST">
-    {% csrf_token %}
-    <div>
-        <label for="organization">Наименование организации:</label>
-        <select name="organization" id="organization">
-            {% for org in organizations %}
-            <option value="{{ org.id }}">{{ org.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div>
-        <label for="username">Имя пользователя:</label>
-        <input type="text" name="username" id="username" required>
-    </div>
-    <div>
-        <label for="password">Пароль:</label>
-        <input type="password" name="password" id="password" required>
-    </div>
-    <button type="submit">Войти</button>
-</form>
+<div class="container">
+  <div class="item">
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Имя пользователя:</label>
+      <input type="text" id="username" name="username" required><br><br>
+
+      <label for="password">Пароль:</label>
+      <input type="password" id="password" name="password" required><br><br>
+
+      <label for="organization">Наименование организации:</label>
+      <select id="organization" name="organization">
+          <option value="">Выберите организацию</option>
+          {% for org in organizations %}
+              <option value="{{ org }}">{{ org }}</option>
+          {% endfor %}
+      </select><br><br>
+
+      <button type="submit">Войти</button>
+    </form>
+  </div>
+</div>
 {% endblock %}
