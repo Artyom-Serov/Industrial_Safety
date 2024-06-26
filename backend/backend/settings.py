@@ -10,6 +10,11 @@ env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env_file = Path(__file__).resolve().parent.parent.parent / '.env'
+
+if env_file.exists():
+    environ.Env.read_env(env_file)
+
 SECRET_KEY = env('SECRET_KEY', default='django-insecure')
 
 DEBUG = env.bool('DEBUG', default=False)
