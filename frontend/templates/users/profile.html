@@ -1,13 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
+  {% if user.is_superuser %}
+  <h2>Список всех пользователей</h2>
+    {% for usr in users %}
+      <div class="item">
+        <p>Наименование организации: {{ usr.organization }}</p>
+        <p>Имя пользователя: {{ usr.username }}</p>
+        <p>Фамилия: {{ usr.last_name }}</p>
+        <p>Имя: {{ usr.first_name }}</p>
+        <p>Адрес электронной почты: {{ usr.email }}</p>
+        <a href="{% url 'edit_user_profile' usr.id %}">Редактировать</a>
+      </div>
+    {% endfor %}
+    <a href="{% url 'register' %}">Добавить пользователя</a>
+  {% else %}
+  <h2>Информация о пользователе</h2>
   <div class="item">
-    <p>Наименование организации: {{ user.organization }}</p>
-    <p>Имя пользователя: {{ user.username }}</p>
-    <p>Фамилия: {{ user.last_name }}</p>
-    <p>Имя: {{ user.first_name }}</p>
-    <p>Адрес электронной почты: {{ user.email }}</p>
-    <a href="{% url 'edit_profile' %}">Редактировать</a>
+      <p>Наименование организации: {{ user.organization }}</p>
+      <p>Имя пользователя: {{ user.username }}</p>
+      <p>Фамилия: {{ user.last_name }}</p>
+      <p>Имя: {{ user.first_name }}</p>
+      <p>Адрес электронной почты: {{ user.email }}</p>
+      <a href="{% url 'edit_profile'%}">Редактировать свой профиль</a>
   </div>
+  {% endif %}
 </div>
 {% endblock %}

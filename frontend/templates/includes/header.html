@@ -1,5 +1,9 @@
 <header>
-    <nav>
-        <h1>Документы по охране труда</h1>
+  <nav>
+    <h1>Документы по охране труда</h1>
+      {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="button">Профиль</a>
+        <a href="{% url 'logout' %}" class="button">Выйти</a>
+      {% endif %}
     </nav>
 </header>

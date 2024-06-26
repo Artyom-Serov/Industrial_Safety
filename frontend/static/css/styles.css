@@ -38,13 +38,14 @@ footer {
 .container {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
 .item {
-    background: rgba(255, 255, 255, 0.8); /* Прозрачный фон для контейнера */
+    background: rgba(255, 255, 255, 0.7);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Тень для контейнера */
-    box-sizing: border-box; /* Учитываем padding и border в ширине и высоте элемента */
-    /* max-width: 600px; Максимальная ширина контейнера */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+    max-width: 700px; /* Максимальная ширина контейнера */
 }
