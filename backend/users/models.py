@@ -4,7 +4,7 @@ from django.db import models
 
 class User(AbstractUser):
     """Модель управления пользователем."""
-    organization_name = models.CharField(
+    organization = models.CharField(
         max_length=255, verbose_name="Наименование организации"
     )
     email = models.EmailField(
