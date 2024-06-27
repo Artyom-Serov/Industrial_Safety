@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, Organization
 from .forms import CustomUserEditForm, CustomUserCreationForm
 
 
@@ -41,4 +41,11 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('username',)
 
 
+class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+    ordering = ('name',)
+
+
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Organization, OrganizationAdmin)

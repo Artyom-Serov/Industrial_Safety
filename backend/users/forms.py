@@ -1,9 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, Organization
 
 
 class CustomUserCreationForm(UserCreationForm):
+    new_organization = forms.CharField(
+        max_length=255, required=False, label='Новая организация'
+    )
+
     class Meta:
         model = User
         fields = (
@@ -16,6 +20,18 @@ class CustomUserCreationForm(UserCreationForm):
             'password2'
         )
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        new_organization = self.cleaned_data.get('new_organization')
+        if new_organization:
+            organization, created = Organization.objects.get_or_create(
+                name=new_organization
+            )
+            user.organization = organization
+        if commit:
+            user.save()
+        return user
+
 
 class CustomUserEditForm(forms.ModelForm):
     password1 = forms.CharField(
@@ -23,34 +39,38 @@ class CustomUserEditForm(forms.ModelForm):
         required=False, widget=forms.PasswordInput
     )
     password2 = forms.CharField(
-        label='Введите новый пароль повторно', required=False, widget=forms.PasswordInput
+        label='Введите новый пароль повторно',
+        required=False, widget=forms.PasswordInput
+    )
+    new_organization = forms.CharField(
+        max_length=255, required=False, label='Новая организация'
     )
 
     class Meta:
         model = User
         fields = (
             'username',
-            'organization',
             'email',
             'first_name',
-            'last_name'
+            'last_name',
+            'organization',
+            'new_organization',
         )
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("password1")
-        password2 = cleaned_data.get("password2")
-
-        if password1 and password1 != password2:
-            self.add_error('password2', "Пароли должны совпадать.")
-
-        return cleaned_data
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['organization'].required = False
+        self.fields['organization'].label = \
+            "Наименование организации (если выбрано)"
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        password = self.cleaned_data.get("password1")
-        if password:
-            user.set_password(password)
+        new_organization = self.cleaned_data.get('new_organization')
+        if new_organization:
+            organization, created = Organization.objects.get_or_create(
+                name=new_organization
+            )
+            user.organization = organization
         if commit:
             user.save()
         return user

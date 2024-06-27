@@ -5,7 +5,7 @@
   <h2>Список всех пользователей</h2>
     {% for usr in users %}
       <div class="item">
-        <p>Наименование организации: {{ usr.organization }}</p>
+        <p>Наименование организации: {{ usr.organization.name }}</p>
         <p>Имя пользователя: {{ usr.username }}</p>
         <p>Фамилия: {{ usr.last_name }}</p>
         <p>Имя: {{ usr.first_name }}</p>
@@ -17,12 +17,14 @@
   {% else %}
   <h2>Информация о пользователе</h2>
   <div class="item">
-      <p>Наименование организации: {{ user.organization }}</p>
+      <p>Наименование организации: {{ user.organization.name }}</p>
       <p>Имя пользователя: {{ user.username }}</p>
       <p>Фамилия: {{ user.last_name }}</p>
       <p>Имя: {{ user.first_name }}</p>
       <p>Адрес электронной почты: {{ user.email }}</p>
-      <a href="{% url 'edit_profile'%}">Редактировать свой профиль</a>
+      <button type="submit">
+        <a href="{% url 'edit_profile'%}">Редактировать свой профиль</a>
+      </button>
   </div>
   {% endif %}
 </div>

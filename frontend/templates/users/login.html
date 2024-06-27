@@ -14,7 +14,7 @@
       <select id="organization" name="organization">
           <option value="">Выберите организацию</option>
           {% for org in organizations %}
-              <option value="{{ org }}">{{ org }}</option>
+              <option value="{{ org.id }}">{{ org }}</option>
           {% endfor %}
       </select><br><br>
 

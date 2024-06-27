@@ -1,28 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import CustomUserCreationForm, CustomUserEditForm
-from .models import User
+from .models import User, Organization
 
 
 def user_login(request):
     template = 'users/login.html'
-    organizations = User.objects.values_list(
-        'organization', flat=True
-    ).distinct()
+    organizations = Organization.objects.all()
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        organization = request.POST.get('organization', '')
-        if username and password and organization:
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('profile')
-    context = {
-        'organizations': organizations,
-    }
-    return render(request, template, context)
+        organization_id = request.POST.get('organization')
+        try:
+            organization = Organization.objects.get(id=organization_id)
+        except Organization.DoesNotExist:
+            organization = None
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None and user.organization == organization:
+            login(request, user)
+            return redirect('profile')
+        else:
+            messages.error(request, 'Неверные имя пользователя, пароль или организация.')
+    return render(request, template, {'organizations': organizations})
 
 
 @login_required

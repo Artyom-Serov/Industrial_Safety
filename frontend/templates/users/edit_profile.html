@@ -4,9 +4,47 @@
   <div class="item">
     <form method="POST">
       {% csrf_token %}
-      {{ form.as_p }}
+      {{ form.non_field_errors }}
+      <p>
+        <label for="id_username">Имя пользователя:</label>
+        {{ form.username }}
+      </p>
+      <p>
+        <label for="id_email">Адрес электронной почты:</label>
+        {{ form.email }}
+      </p>
+      <p>
+        <label for="id_first_name">Имя:</label>
+        {{ form.first_name }}
+      </p>
+      <p>
+        <label for="id_last_name">Фамилия:</label>
+        {{ form.last_name }}
+      </p>
+      <p>
+        <label for="id_organization">Наименование организации:</label>
+        {{ form.organization }}
+      </p>
+      <p>
+        <label for="id_password1">Введите новый пароль, если его необходимо изменить:</label>
+        {{ form.password1 }}
+      </p>
+      <p>
+        <label for="id_password2">Новый пароль (повторно):</label>
+        {{ form.password2 }}
+      </p>
+      {% if user.is_staff %}
+      <p>
+        <label for="id_new_organization">Новая организация:</label>
+        {{ form.new_organization }}
+      </p>
+      {% endif %}
       <button type="submit">Сохранить</button>
+      <button type="submit">
+        <a href="{% url 'profile' %}">Отмена</a>
+      </button>
     </form>
   </div>
 </div>
 {% endblock %}
+
