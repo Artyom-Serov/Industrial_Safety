@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h2>Проверки вашей организации</h2>
+<button type="button">
+  <a href="{% url 'facility:create_examination' %}"
+     class="btn btn-primary">Внести данные
+  </a>
+</button>
+<div class="container">
+  <div class="item">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Дата создания</th>
+          <th>Дата текущей проверки</th>
+          <th>Дата следующей проверки</th>
+          <th>Номер протокола</th>
+          <th>Причина</th>
+          <th>Комиссия</th>
+          <th>Аттестуемый</th>
+          <th>Инструктаж</th>
+          <th>Программа обучения</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for examination in examinations %}
+        <tr>
+          <td>{{ examination.created_at }}</td>
+          <td>{{ examination.current_check_date }}</td>
+          <td>{{ examination.next_check_date }}</td>
+          <td>{{ examination.protocol_number }}</td>
+          <td>{{ examination.reason }}</td>
+          <td>{{ examination.commission }}</td>
+          <td>{{ examination.examined }}</td>
+          <td>{{ examination.briefing }}</td>
+          <td>{{ examination.course }}</td>
+          <td>
+            <button type="button">
+            <a href="{% url 'facility:update_examination' examination.pk %}"
+               class="btn btn-warning">
+                Редактировать
+            </a>
+            </button>
+            <button type="button">
+            <a href="{% url 'facility:delete_examination' examination.pk %}"
+               class="btn btn-danger">
+                Удалить
+            </a>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="item">
+    <p>Приветствую Вас в приложении для контроля за проверками
+        в области охраны труда и промышленной безопасности. Ознакомление
+        с функционалом приложения доступно только зарегистрированным пользователям.
+        Для регистрации обратитесь к администратору.
+    </p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
