@@ -14,9 +14,12 @@ class IndexView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Examination.objects.filter(
-                examined__company_name=self.request.user.organization
-            ).order_by('-created_at')
+            if self.request.user.is_superuser:
+                return Examination.objects.all().order_by('-created_at')
+            else:
+                return Examination.objects.filter(
+                    examined__company_name=self.request.user.organization
+                ).order_by('-created_at')
         return Examination.objects.none()
 
 
