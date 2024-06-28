@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-  {% if user.is_superuser %}
-  <h2>Список всех пользователей</h2>
+{% if user.is_superuser %}
+  <h2 align="center">Список всех пользователей</h2>
+    <div class="container">
     {% for usr in users %}
       <div class="item">
         <p>Наименование организации: {{ usr.organization.name }}</p>
@@ -13,10 +13,12 @@
         <a href="{% url 'users:edit_user_profile' usr.id %}">Редактировать</a>
       </div>
     {% endfor %}
+    </div>
     <a href="{% url 'users:register' %}">Добавить пользователя</a>
   {% else %}
-  <h2>Информация о пользователе</h2>
-  <div class="item">
+  <h2 align="center">Информация о пользователе</h2>
+  <div class="container">
+    <div class="item">
       <p>Наименование организации: {{ user.organization.name }}</p>
       <p>Имя пользователя: {{ user.username }}</p>
       <p>Фамилия: {{ user.last_name }}</p>
@@ -25,7 +27,7 @@
       <button type="submit">
         <a href="{% url 'users:edit_profile'%}">Редактировать свой профиль</a>
       </button>
+    </div>
   </div>
   {% endif %}
-</div>
 {% endblock %}
