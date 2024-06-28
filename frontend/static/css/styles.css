@@ -47,5 +47,5 @@ footer {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
     box-sizing: border-box;
-    max-width: 700px; /* Максимальная ширина контейнера */
+    /* max-width: 700px; Максимальная ширина контейнера */
 }

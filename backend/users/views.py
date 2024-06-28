@@ -21,7 +21,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None and user.organization == organization:
             login(request, user)
-            return redirect('profile')
+            return redirect('facility:index')
         else:
             messages.error(request, 'Неверные имя пользователя, пароль или организация.')
     return render(request, template, {'organizations': organizations})
@@ -44,7 +44,7 @@ def edit_profile(request):
         form = CustomUserEditForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            return redirect('users:profile')
     else:
         form = CustomUserEditForm(instance=request.user)
     return render(request, template, {'form': form})
@@ -58,7 +58,7 @@ def admin_edit_user_profile(request, user_id):
         form = CustomUserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            return redirect('users:profile')
     else:
         form = CustomUserEditForm(instance=user)
     return render(request, template, {'form': form, 'edit_user': user})
@@ -75,7 +75,7 @@ def user_register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            return redirect('users:profile')
     else:
         form = CustomUserCreationForm()
     return render(request, template, {'form': form})
@@ -83,4 +83,4 @@ def user_register(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('login')
+    return redirect('users:login')
