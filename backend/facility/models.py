@@ -194,7 +194,8 @@ class Examination(models.Model):
         verbose_name="Номер протокола проверки",
         help_text="Номер протокола проверки"
     )
-    reason = models.TextField(
+    reason = models.CharField(
+        max_length=255,
         verbose_name="Причина проверки",
         help_text="Укажите причину проверки"
     )
