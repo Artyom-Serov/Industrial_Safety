@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Внести данные</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Сохранить</button>
-    <a href="{% url 'facility:index' %}" class="btn btn-secondary">Отмена</a>
-</form>
+<h2 align="center">Внесение данных</h2>
+  <div class="container">
+    <div class="item">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить
+        </button>
+        <button>
+          <a href="{% url 'facility:index' %}">
+            Отмена
+          </a>
+        </button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

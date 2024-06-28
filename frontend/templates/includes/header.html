@@ -1,19 +1,19 @@
 <header>
   <nav>
-    <h1>Информация по проверкам</h1>
+    <h1>Информационная база по проверкам</h1>
       <button type="button">
         <a href="{% url 'facility:index' %}">Главная</a>
       </button>
       {% if user.is_authenticated %}
       <button type="button">
-        <a href="{% url 'users:profile' %}" class="button">Профиль</a>
+        <a href="{% url 'users:profile' %}">Профиль</a>
       </button>
       <button type="button">
-        <a href="{% url 'users:logout' %}" class="button">Выйти</a>
+        <a href="{% url 'users:logout' %}">Выйти</a>
       </button>
       {% else %}
       <button type="button">
-        <a href="{% url 'users:login' %}" class="button">Войти</a>
+        <a href="{% url 'users:login' %}"">Войти</a>
       </button>
       {% endif %}
     </nav>
