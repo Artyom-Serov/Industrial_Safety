@@ -1,12 +1,19 @@
 <header>
   <nav>
-    <h1>Документы по охране труда</h1>
+    <h1>Информация по проверкам</h1>
+      <button type="button">
+        <a href="{% url 'facility:index' %}">Главная</a>
+      </button>
       {% if user.is_authenticated %}
       <button type="button">
-        <a href="{% url 'profile' %}" class="button">Профиль</a>
+        <a href="{% url 'users:profile' %}" class="button">Профиль</a>
       </button>
       <button type="button">
-        <a href="{% url 'logout' %}" class="button">Выйти</a>
+        <a href="{% url 'users:logout' %}" class="button">Выйти</a>
+      </button>
+      {% else %}
+      <button type="button">
+        <a href="{% url 'users:login' %}" class="button">Войти</a>
       </button>
       {% endif %}
     </nav>
