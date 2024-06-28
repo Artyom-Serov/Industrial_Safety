@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<h2>Проверки вашей организации</h2>
+<h2 align="center">Проверки вашей организации</h2>
 <button type="button">
   <a href="{% url 'facility:create_examination' %}"
      class="btn btn-primary">Внести данные
@@ -10,57 +10,92 @@
 </button>
 <div class="container">
   <div class="item">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Дата создания</th>
-          <th>Дата текущей проверки</th>
-          <th>Дата следующей проверки</th>
-          <th>Номер протокола</th>
-          <th>Причина</th>
-          <th>Комиссия</th>
-          <th>Аттестуемый</th>
-          <th>Инструктаж</th>
-          <th>Программа обучения</th>
-          <th>Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for examination in examinations %}
-        <tr>
-          <td>{{ examination.created_at }}</td>
-          <td>{{ examination.current_check_date }}</td>
-          <td>{{ examination.next_check_date }}</td>
-          <td>{{ examination.protocol_number }}</td>
-          <td>{{ examination.reason }}</td>
-          <td>{{ examination.commission }}</td>
-          <td>{{ examination.examined }}</td>
-          <td>{{ examination.briefing }}</td>
-          <td>{{ examination.course }}</td>
-          <td>
-            <button type="button">
-            <a href="{% url 'facility:update_examination' examination.pk %}"
-               class="btn btn-warning">
-                Редактировать
-            </a>
-            </button>
-            <button type="button">
-            <a href="{% url 'facility:delete_examination' examination.pk %}"
-               class="btn btn-danger">
-                Удалить
-            </a>
-            </button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Номер протокола</th>
+            <th>Дата записи</th>
+            <th>Дата текущей проверки</th>
+            <th>Дата следующей проверки</th>
+            <th>ФИО аттестуемого</th>
+            <th>Должность аттестуемого</th>
+            <th>Цех, участок аттестуемого</th>
+            <th>ФИО председателя комиссии</th>
+            <th>Должность председателя комиссии</th>
+            <th>ФИО первого члена комиссии</th>
+            <th>Должность первого члена комиссии</th>
+            <th>ФИО второго члена комиссии</th>
+            <th>Должность второго члена комиссии</th>
+            <th>ФИО ответственного за электро-безопасность</th>
+            <th>Должность ответственного за электро-безопасность</th>
+            <th>Причина проверки знаний</th>
+            <th>Дата предыдущей проверки</th>
+            <th>Предыдущая группа по ЭБ</th>
+            <th>Вид проводимого инструктажа</th>
+            <th>№ программы обучения</th>
+            <th>Наименование программы обучения</th>
+            <th>Группа по ЭБ</th>
+            <th>Стаж работы</th>
+            <th>Номер удостоверения</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for examination in examinations %}
+          <tr>
+            <td>{{ examination.protocol_number }}</td>
+            <td>{{ examination.created_at }}</td>
+            <td>{{ examination.current_check_date }}</td>
+            <td>{{ examination.next_check_date }}</td>
+            <td>{{ examination.examined.full_name }}</td>
+            <td>{{ examination.examined.position }}</td>
+            <td>{{ examination.examined.brigade }}</td>
+            <td>{{ examination.commission.chairman_full_name }}</td>
+            <td>{{ examination.commission.chairman_position }}</td>
+            <td>{{ examination.commission.member1_full_name }}</td>
+            <td>{{ examination.commission.member1_position }}</td>
+            <td>{{ examination.commission.member2_full_name }}</td>
+            <td>{{ examination.commission.member2_position }}</td>
+            <td>{{ examination.commission.safety_officer_full_name }}</td>
+            <td>{{ examination.commission.safety_officer_position }}</td>
+            <td>{{ examination.reason }}</td>
+            <td>{{ examination.previous_check_date }}</td>
+            <td>{{ examination.examined.previous_safety_group }}</td>
+            <td>{{ examination.briefing }}</td>
+            <td>{{ examination.course.course_number }}</td>
+            <td>{{ examination.course.course_name }}</td>
+            <td>{{ examination.examined.safety_group }}</td>
+            <td>{{ examination.examined.work_experience }}</td>
+            <td>{{ examination.course.certificate_number }}</td>
+            <td>
+              <button type="button">
+              <a href="{% url 'facility:update_examination' examination.pk %}"
+                 class="btn btn-warning">
+                  Редакти-ровать
+              </a>
+              </button>
+              <button type="button">
+              <a href="{% url 'facility:delete_examination' examination.pk %}"
+                 class="btn btn-danger">
+                  Удалить
+                </a>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
   {% else %}
-  <div class="item">
+  <div class="item" align="center">
     <p>Приветствую Вас в приложении для контроля за проверками
-        в области охраны труда и промышленной безопасности. Ознакомление
-        с функционалом приложения доступно только зарегистрированным пользователям.
+        в области охраны труда и промышленной безопасности.
+    </p>
+    <p>Ознакомление с функционалом приложения доступно только зарегистрированным пользователям.
+    </p>
+    <p>
         Для регистрации обратитесь к администратору.
     </p>
   </div>
