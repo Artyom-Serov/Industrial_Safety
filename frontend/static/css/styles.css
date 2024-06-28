@@ -14,21 +14,21 @@ body {
 
 header {
     background: rgba(32, 178, 170, 0.4);
-    padding: 10px;
+    padding: 0;
     text-align: center;
 }
 
 main {
     flex: 1;
-    padding: 20px;
-    width: 100%;
-    max-width: 1200px;
+    padding: 30px;
+    width: 98%;
+    /* max-width: 1200px; */
     margin: 0 auto;
 }
 
 footer {
     background: rgba(32, 178, 170, 0.3);
-    padding: 10px;
+    padding: 0;
     text-align: center;
     position: relative;
     bottom: 0;
@@ -39,13 +39,42 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .item {
     background: rgba(255, 255, 255, 0.7);
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
     box-sizing: border-box;
-    /* max-width: 700px; Максимальная ширина контейнера */
+    max-width: 98%; /* Максимальная ширина контейнера */
+}
+
+/* Стили для страницы index.html */
+.table-container {
+    overflow-x: auto; /* Добавляет горизонтальную прокрутку для контейнера таблицы */
+}
+
+table {
+    width: 100%; /* Устанавливает ширину таблицы на 100% от контейнера */
+    border-collapse: collapse; /* Объединяет границы таблицы и ячеек в одну линию */
+    table-layout: fixed; /* Устанавливает фиксированную ширину столбцов, сжимает таблицу */
+}
+
+th, td {
+    border: 1px solid black; /* Устанавливает цвет и толщину границыx для заголовков и ячеек */
+    padding: 5px; /* Устанавливает внутренний отступ в px для заголовков и ячеек */
+    text-align: center;
+    width: 100px;
+}
+
+th {
+    font-size: 12px; /* Уменьшает размер шрифта в заголовках */
+}
+
+td {
+    word-wrap: break-word; /* Переносит длинные слова на новую строку в ячейках */
+    font-size: 12px; /* Уменьшает размер шрифта в ячейках */
 }
