@@ -179,15 +179,15 @@ class Examination(models.Model):
         blank=True,
         null=True,
         verbose_name="Дата проведения предыдущей проверки",
-        help_text="Дата проведения предыдущей проверки"
+        help_text="Укажите дату предыдущей проверки"
     )
     current_check_date = models.DateField(
         verbose_name="Дата проведения текущей проверки",
-        help_text="Дата проведения текущей проверки"
+        help_text="Укажите дату текущей проверки"
     )
     next_check_date = models.DateField(
         verbose_name="Дата проведения следующей проверки",
-        help_text="Дата проведения следующей проверки"
+        help_text="Укажите дату следующей проверки"
     )
     protocol_number = models.CharField(
         max_length=255,
@@ -196,7 +196,7 @@ class Examination(models.Model):
     )
     reason = models.TextField(
         verbose_name="Причина проверки",
-        help_text="Причина проверки"
+        help_text="Укажите причину проверки"
     )
 
     commission = models.ForeignKey(
@@ -209,19 +209,19 @@ class Examination(models.Model):
         Examined,
         on_delete=models.CASCADE,
         verbose_name="Аттестуемый",
-        help_text="Аттестуемый, проходящий проверку"
+        help_text="Введите данные аттестуемого"
     )
     briefing = models.ForeignKey(
         Briefing,
         on_delete=models.CASCADE,
         verbose_name="Инструктаж",
-        help_text="Инструктаж, связанный с проверкой"
+        help_text="Выберите вид инструктажа"
     )
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
         verbose_name="Программа обучения",
-        help_text="Программа обучения, связанная с проверкой"
+        help_text="Выберите программу обучения"
     )
 
     class Meta:
