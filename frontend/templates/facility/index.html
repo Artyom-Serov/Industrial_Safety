@@ -3,24 +3,41 @@
 {% block content %}
 {% if user.is_authenticated %}
 <h2 align="center">Проверки вашей организации</h2>
-<button type="button">
-  <a href="{% url 'facility:create_examination' %}"
-     class="btn btn-primary">Внести данные
-  </a>
-</button>
+<div class="container">
+  <button type="button">
+    <a href="{% url 'facility:create_examination' %}"
+       class="btn btn-primary">Внести данные
+    </a>
+  </button>
+
+  <div class="item">
+    <form method="get" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="date" name="current_check_date" placeholder="Дата текущей проверки" value="{{ request.GET.current_check_date }}">
+      <input class="form-control mr-sm-2" type="date" name="next_check_date" placeholder="Дата следующей проверки" value="{{ request.GET.next_check_date }}">
+      <input class="form-control mr-sm-2" type="text" name="course_number" placeholder="№ программы обучения" value="{{ request.GET.course_number }}">
+      <input class="form-control mr-sm-2" type="text" name="course_name" placeholder="Наименование программы обучения" value="{{ request.GET.course_name }}">
+      <input class="form-control mr-sm-2" type="text" name="brigade" placeholder="Цех, участок аттестуемого" value="{{ request.GET.brigade }}">
+      <button class="button" type="submit">Фильтровать</button>
+      <button class="button">
+        <a href="{% url 'facility:index' %}">Сбросить фильтр</a>
+      </button>
+    </form>
+  </div>
+</div>
+<br>
 <div class="container">
   <div class="item">
     <div class="table-container">
       <table>
         <thead>
           <tr>
-            <th>Номер протокола</th>
-            <th>Дата записи</th>
-            <th>Дата текущей проверки</th>
-            <th>Дата следующей проверки</th>
+            <th><a href="?{% if request.GET.order_by == 'protocol_number' %}order_by=-protocol_number{% else %}order_by=protocol_number{% endif %}">Номер протокола</th>
+            <th><a href="?{% if request.GET.order_by == 'created_at' %}order_by=-created_at{% else %}order_by=created_at{% endif %}">Дата записи</th>
+            <th><a href="?{% if request.GET.order_by == 'current_check_date' %}order_by=-current_check_date{% else %}order_by=current_check_date{% endif %}">Дата текущей проверки</th>
+            <th><a href="?{% if request.GET.order_by == 'next_check_date' %}order_by=-next_check_date{% else %}order_by=next_check_date{% endif %}">Дата следующей проверки</th>
             <th>ФИО аттестуемого</th>
             <th>Должность аттестуемого</th>
-            <th>Цех, участок аттестуемого</th>
+            <th><a href="?{% if request.GET.order_by == 'examined__brigade' %}order_by=-examined__brigade{% else %}order_by=examined__brigade{% endif %}">Цех, участок аттестуемого</th>
             <th>ФИО председателя комиссии</th>
             <th>Должность председателя комиссии</th>
             <th>ФИО первого члена комиссии</th>
@@ -33,8 +50,8 @@
             <th>Дата предыдущей проверки</th>
             <th>Предыдущая группа по ЭБ</th>
             <th>Вид проводимого инструктажа</th>
-            <th>№ программы обучения</th>
-            <th>Наименование программы обучения</th>
+            <th><a href="?{% if request.GET.order_by == 'course__course_number' %}order_by=-course__course_number{% else %}order_by=course__course_number{% endif %}">№ программы обучения</th>
+            <th><a href="?{% if request.GET.order_by == 'course__course_name' %}order_by=-course__course_name{% else %}order_by=course__course_name{% endif %}">Наименование программы обучения</th>
             <th>Группа по ЭБ</th>
             <th>Стаж работы</th>
             <th>Номер удостоверения</th>
@@ -71,13 +88,13 @@
             <td>
               <button type="button">
               <a href="{% url 'facility:update_examination' examination.pk %}"
-                 class="btn btn-warning">
+                 class="button">
                   Редакти-ровать
               </a>
               </button>
               <button type="button">
               <a href="{% url 'facility:delete_examination' examination.pk %}"
-                 class="btn btn-danger">
+                 class="button">
                   Удалить
                 </a>
               </button>
@@ -91,13 +108,9 @@
   {% else %}
   <div class="item" align="center">
     <p>Приветствую Вас в приложении для контроля за проверками
-        в области охраны труда и промышленной безопасности.
-    </p>
-    <p>Ознакомление с функционалом приложения доступно только зарегистрированным пользователям.
-    </p>
-    <p>
-        Для регистрации обратитесь к администратору.
-    </p>
+        в области охраны труда и промышленной безопасности.</p>
+    <p>Ознакомление с функционалом приложения доступно только зарегистрированным пользователям.</p>
+    <p>Для регистрации обратитесь к администратору.</p>
   </div>
 </div>
 {% endif %}

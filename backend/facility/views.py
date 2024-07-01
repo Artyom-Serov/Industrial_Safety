@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.views.generic import ListView
 from .models import Examination, Examined, Commission, Briefing, Course
 from .forms import ExaminationForm
 
@@ -15,11 +14,38 @@ class IndexView(ListView):
     def get_queryset(self):
         if self.request.user.is_authenticated:
             if self.request.user.is_superuser:
-                return Examination.objects.all().order_by('-created_at')
+                queryset = Examination.objects.all()
             else:
-                return Examination.objects.filter(
+                queryset = Examination.objects.filter(
                     examined__company_name=self.request.user.organization
-                ).order_by('-created_at')
+                )
+
+            current_check_date = self.request.GET.get('current_check_date')
+            next_check_date = self.request.GET.get('next_check_date')
+            course_number = self.request.GET.get('course_number')
+            course_name = self.request.GET.get('course_name')
+            brigade = self.request.GET.get('brigade')
+            order_by = self.request.GET.get('order_by', '-created_at')
+
+            if current_check_date:
+                queryset = queryset.filter(current_check_date=current_check_date)
+                print(f"Фильтр по current_check_date: {current_check_date}, найдено записей: {queryset.count()}")
+            if next_check_date:
+                queryset = queryset.filter(next_check_date=next_check_date)
+                print(f"Фильтр по next_check_date: {next_check_date}, найдено записей: {queryset.count()}")
+            if course_number:
+                queryset = queryset.filter(course__course_number__icontains=course_number)
+                print(f"Фильтр по course_number: {course_number}, найдено записей: {queryset.count()}")
+            if course_name:
+                queryset = queryset.filter(course__course_name__icontains=course_name)
+                print(f"Фильтр по course_name: {course_name}, найдено записей: {queryset.count()}")
+            if brigade:
+                queryset = queryset.filter(examined__brigade__icontains=brigade)
+                print(f"Фильтр по brigade: {brigade}, найдено записей: {queryset.count()}")
+
+            queryset = queryset.order_by(order_by)
+            print(f"Итоговое количество записей после фильтров: {queryset.count()}")
+            return queryset
         return Examination.objects.none()
 
 
@@ -34,7 +60,14 @@ def create_examination(request):
             return redirect('facility:index')
     else:
         form = ExaminationForm()
-    return render(request, template, {'form': form})
+    context = {
+        'form': form,
+        'commissions': Commission.objects.all(),
+        'briefings': Briefing.objects.all(),
+        'examined_list': Examined.objects.all(),
+        'courses': Course.objects.all()
+    }
+    return render(request, template, context)
 
 
 @login_required
@@ -48,7 +81,14 @@ def update_examination(request, pk):
             return redirect('facility:index')
     else:
         form = ExaminationForm(instance=examination)
-    return render(request, template, {'form': form})
+    context = {
+        'form': form,
+        'commissions': Commission.objects.all(),
+        'briefing': Briefing.objects.all(),
+        'examined_list': Examined.objects.all(),
+        'courses': Course.objects.all()
+    }
+    return render(request, template, context)
 
 
 @login_required
