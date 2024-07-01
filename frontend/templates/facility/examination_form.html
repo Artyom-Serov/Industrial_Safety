@@ -1,20 +1,106 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 align="center">Внесение данных</h2>
-  <div class="container">
-    <div class="item">
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Сохранить
-        </button>
-        <button>
-          <a href="{% url 'facility:index' %}">
-            Отмена
-          </a>
-        </button>
-      </form>
-    </div>
+<h2 align="center">{% if examination.pk %}Редактирование данных{% else %}Внесение данных{% endif %}</h2>
+<div class="container">
+  <div class="item">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="previous_check_date">Дата предыдущей проверки</label>
+        <input type="date" id="previous_check_date" name="previous_check_date" class="form-control" value="{{ form.previous_check_date.value }}">
+      </div>
+      <div class="form-group">
+        <label for="current_check_date">Дата текущей проверки</label>
+        <input type="date" id="current_check_date" name="current_check_date" class="form-control" value="{{ form.current_check_date.value }}">
+      </div>
+      <div class="form-group">
+        <label for="next_check_date">Дата следующей проверки</label>
+        <input type="date" id="next_check_date" name="next_check_date" class="form-control" value="{{ form.next_check_date.value }}">
+      </div>
+      <div class="form-group">
+        <label for="protocol_number">Номер протокола</label>
+        <input type="text" id="protocol_number" name="protocol_number" class="form-control" value="{{ form.protocol_number.value }}">
+      </div>
+      <div class="form-group">
+        <label for="reason">Причина проверки</label>
+        <input type="text" id="reason" name="reason" class="form-control" value="{{ form.reason.value }}">
+      </div>
+
+      <h3>Комиссия</h3>
+      <div class="form-group">
+        <label for="chairman_full_name">ФИО председателя</label>
+        <input type="text" id="chairman_full_name" name="chairman_full_name" class="form-control" value="{{ form.chairman_full_name.value }}">
+      </div>
+      <div class="form-group">
+        <label for="chairman_position">Должность председателя</label>
+        <input type="text" id="chairman_position" name="chairman_position" class="form-control" value="{{ form.chairman_position.value }}">
+      </div>
+      <div class="form-group">
+        <label for="member1_full_name">ФИО первого члена комиссии</label>
+        <input type="text" id="member1_full_name" name="member1_full_name" class="form-control" value="{{ form.member1_full_name.value }}">
+      </div>
+      <div class="form-group">
+        <label for="member1_position">Должность первого члена комиссии</label>
+        <input type="text" id="member1_position" name="member1_position" class="form-control" value="{{ form.member1_position.value }}">
+      </div>
+      <div class="form-group">
+        <label for="member2_full_name">ФИО второго члена комиссии</label>
+        <input type="text" id="member2_full_name" name="member2_full_name" class="form-control" value="{{ form.member2_full_name.value }}">
+      </div>
+      <div class="form-group">
+        <label for="member2_position">Должность второго члена комиссии</label>
+        <input type="text" id="member2_position" name="member2_position" class="form-control" value="{{ form.member2_position.value }}">
+      </div>
+      <div class="form-group">
+        <label for="safety_officer_full_name">ФИО ответственного за электро-безопасность</label>
+        <input type="text" id="safety_officer_full_name" name="safety_officer_full_name" class="form-control" value="{{ form.safety_officer_full_name.value }}">
+      </div>
+      <div class="form-group">
+        <label for="safety_officer_position">Должность ответственного за электро-безопасность</label>
+        <input type="text" id="safety_officer_position" name="safety_officer_position" class="form-control" value="{{ form.safety_officer_position.value }}">
+      </div>
+
+      <h3>Аттестуемый</h3>
+      <div class="form-group">
+        <label for="full_name">ФИО аттестуемого</label>
+        <input type="text" id="full_name" name="full_name" class="form-control" value="{{ form.full_name.value }}">
+      </div>
+      <div class="form-group">
+        <label for="position">Должность аттестуемого</label>
+        <input type="text" id="position" name="position" class="form-control" value="{{ form.position.value }}">
+      </div>
+      <div class="form-group">
+        <label for="brigade">Цех, участок аттестуемого</label>
+        <input type="text" id="brigade" name="brigade" class="form-control" value="{{ form.brigade.value }}">
+      </div>
+
+      <h3>Инструктаж</h3>
+      <div class="form-group">
+        <label for="briefing">Выберите вид инструктажа</label>
+        <select id="briefing" name="briefing" class="form-control">
+          {% for briefing in briefings %}
+          <option value="{{ briefing.id }}" {% if form.briefing.value == briefing.id %}selected{% endif %}>{{ briefing.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <h3>Программа обучения</h3>
+      <div class="form-group">
+        <label for="course">Выберите программу обучения</label>
+        <select id="course" name="course" class="form-control">
+          {% for course in courses %}
+          <option value="{{ course.id }}" {% if form.course.value == course.id %}selected{% endif %}>{{ course.course_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <br>
+      <button type="submit">Сохранить</button>
+      <button>
+        <a href="{% url 'facility:index' %}">Отмена</a>
+      </button>
+    </form>
   </div>
+</div>
 {% endblock %}
+
