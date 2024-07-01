@@ -29,22 +29,16 @@ class IndexView(ListView):
 
             if current_check_date:
                 queryset = queryset.filter(current_check_date=current_check_date)
-                print(f"Фильтр по current_check_date: {current_check_date}, найдено записей: {queryset.count()}")
             if next_check_date:
                 queryset = queryset.filter(next_check_date=next_check_date)
-                print(f"Фильтр по next_check_date: {next_check_date}, найдено записей: {queryset.count()}")
             if course_number:
                 queryset = queryset.filter(course__course_number__icontains=course_number)
-                print(f"Фильтр по course_number: {course_number}, найдено записей: {queryset.count()}")
             if course_name:
                 queryset = queryset.filter(course__course_name__icontains=course_name)
-                print(f"Фильтр по course_name: {course_name}, найдено записей: {queryset.count()}")
             if brigade:
                 queryset = queryset.filter(examined__brigade__icontains=brigade)
-                print(f"Фильтр по brigade: {brigade}, найдено записей: {queryset.count()}")
-
             queryset = queryset.order_by(order_by)
-            print(f"Итоговое количество записей после фильтров: {queryset.count()}")
+
             return queryset
         return Examination.objects.none()
 
