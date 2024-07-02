@@ -45,7 +45,7 @@ class IndexView(ListView):
 
 @login_required
 def create_examination(request):
-    template = 'facility/examination_form.html'
+    template = 'facility/examination_create_form.html'
     if request.method == 'POST':
         form = ExaminationForm(request.POST)
         if form.is_valid():
@@ -54,20 +54,13 @@ def create_examination(request):
             return redirect('facility:index')
     else:
         form = ExaminationForm()
-    context = {
-        'form': form,
-        'commissions': Commission.objects.all(),
-        'briefings': Briefing.objects.all(),
-        'examined_list': Examined.objects.all(),
-        'courses': Course.objects.all()
-    }
-    return render(request, template, context)
+    return render(request, template, {'form': form})
 
 
 @login_required
 def update_examination(request, pk):
     examination = get_object_or_404(Examination, pk=pk)
-    template = 'facility/examination_form.html'
+    template = 'facility/examination_update_form.html'
     if request.method == 'POST':
         form = ExaminationForm(request.POST, instance=examination)
         if form.is_valid():
@@ -75,14 +68,7 @@ def update_examination(request, pk):
             return redirect('facility:index')
     else:
         form = ExaminationForm(instance=examination)
-    context = {
-        'form': form,
-        'commissions': Commission.objects.all(),
-        'briefing': Briefing.objects.all(),
-        'examined_list': Examined.objects.all(),
-        'courses': Course.objects.all()
-    }
-    return render(request, template, context)
+    return render(request, template, {'form': form})
 
 
 @login_required
