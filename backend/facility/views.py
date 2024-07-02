@@ -47,13 +47,13 @@ class IndexView(ListView):
 def create_examination(request):
     template = 'facility/examination_create_form.html'
     if request.method == 'POST':
-        form = ExaminationForm(request.POST)
+        form = ExaminationForm(request.POST, user=request.user)
         if form.is_valid():
             examination = form.save(commit=False)
             examination.save()
             return redirect('facility:index')
     else:
-        form = ExaminationForm()
+        form = ExaminationForm(user=request.user)
     return render(request, template, {'form': form})
 
 
