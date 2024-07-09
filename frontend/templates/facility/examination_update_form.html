@@ -6,12 +6,84 @@
     <div class="item">
       <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Сохранить</button>
-        <button type="button">
-          <a href="{% url 'facility:index' %}">Отмена</a>
-        </button>
+        {{ form.non_field_errors }}
+        <div class="form-group">
+          <label for="{{ form.previous_check_date.id_for_label }}">{{ form.previous_check_date.label }}</label>
+          {{ form.previous_check_date }}
+          {{ form.previous_check_date.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.current_check_date.id_for_label }}">{{ form.current_check_date.label }}</label>
+          {{ form.current_check_date }}
+          {{ form.current_check_date.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.next_check_date.id_for_label }}">{{ form.next_check_date.label }}</label>
+          {{ form.next_check_date }}
+          {{ form.next_check_date.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.protocol_number.id_for_label }}">{{ form.protocol_number.label }}</label>
+          {{ form.protocol_number }}
+          {{ form.protocol_number.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.reason.id_for_label }}">{{ form.reason.label }}</label>
+          {{ form.reason }}
+          {{ form.reason.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.commission.id_for_label }}">{{ form.commission.label }}</label>
+          {{ form.commission }}
+          {{ form.commission.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.briefing.id_for_label }}">{{ form.briefing.label }}</label>
+          {{ form.briefing }}
+          {{ form.briefing.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.course.id_for_label }}">{{ form.course.label }}</label>
+          {{ form.course }}
+          {{ form.course.help_text }}
+        </div>
+
+        <h3>Данные аттестуемого</h3>
+        <div class="form-group">
+          <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+          {{ form.full_name }}
+          {{ form.full_name.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.position.id_for_label }}">{{ form.position.label }}</label>
+          {{ form.position }}
+          {{ form.position.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.brigade.id_for_label }}">{{ form.brigade.label }}</label>
+          {{ form.brigade }}
+          {{ form.brigade.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.previous_safety_group.id_for_label }}">{{ form.previous_safety_group.label }}</label>
+          {{ form.previous_safety_group }}
+          {{ form.previous_safety_group.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.safety_group.id_for_label }}">{{ form.safety_group.label }}</label>
+          {{ form.safety_group }}
+          {{ form.safety_group.help_text }}
+        </div>
+        <div class="form-group">
+          <label for="{{ form.work_experience.id_for_label }}">{{ form.work_experience.label }}</label>
+          {{ form.work_experience }}
+          {{ form.work_experience.help_text }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'facility:index' %}" class="btn btn-secondary">Отмена</a>
       </form>
     </div>
   </div>
 {% endblock %}
+
