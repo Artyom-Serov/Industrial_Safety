@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from .models import Examination, Examined, Commission, Briefing, Course
-from .forms import ExaminationForm
+from .forms import ExaminationCreateForm
 
 
 class IndexView(ListView):
@@ -47,13 +47,13 @@ class IndexView(ListView):
 def create_examination(request):
     template = 'facility/examination_create_form.html'
     if request.method == 'POST':
-        form = ExaminationForm(request.POST, user=request.user)
+        form = ExaminationCreateForm(request.POST, user=request.user)
         if form.is_valid():
             examination = form.save(commit=False)
             examination.save()
             return redirect('facility:index')
     else:
-        form = ExaminationForm(user=request.user)
+        form = ExaminationCreateForm(user=request.user)
     return render(request, template, {'form': form})
 
 
@@ -62,12 +62,12 @@ def update_examination(request, pk):
     examination = get_object_or_404(Examination, pk=pk)
     template = 'facility/examination_update_form.html'
     if request.method == 'POST':
-        form = ExaminationForm(request.POST, instance=examination)
+        form = ExaminationUpdateForm(request.POST, instance=examination)
         if form.is_valid():
             form.save()
             return redirect('facility:index')
     else:
-        form = ExaminationForm(instance=examination)
+        form = ExaminationUpdateForm(instance=examination)
     return render(request, template, {'form': form})
 
 
