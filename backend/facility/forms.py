@@ -8,7 +8,8 @@ class ExaminationCreateForm(forms.ModelForm):
         model = Examination
         fields = [
             'previous_check_date', 'current_check_date', 'next_check_date',
-            'protocol_number', 'reason', 'commission', 'briefing', 'course'
+            'protocol_number', 'reason', 'commission', 'briefing', 'course',
+            'certificate_number'
         ]
 
     full_name = forms.CharField(
@@ -42,13 +43,6 @@ class ExaminationCreateForm(forms.ModelForm):
         max_length=255,
         label="Стаж работы",
         help_text="Введите стаж работы"
-    )
-    certificate_number = forms.CharField(
-        max_length=255,
-        required=False,
-        label="Номер удостоверения",
-        help_text="Введите номер удостоверения по специальности "
-                  "(при необходимости)"
     )
 
     def __init__(self, *args, **kwargs):
@@ -103,8 +97,7 @@ class ExaminationUpdateForm(forms.ModelForm):
     full_name = forms.CharField(max_length=255, label="ФИО проверяемого")
     position = forms.CharField(max_length=255, label="Должность проверяемого")
     brigade = forms.CharField(
-        max_length=255,
-        label="Цех (участок) проверяемого"
+        max_length=255, label="Участок (бригада) проверяемого"
     )
     previous_safety_group = forms.CharField(
         max_length=255, required=False,
@@ -114,15 +107,13 @@ class ExaminationUpdateForm(forms.ModelForm):
         max_length=255, label="Группа электробезопасности"
     )
     work_experience = forms.CharField(max_length=255, label="Стаж работы")
-    certificate_number = forms.CharField(
-        max_length=255, required=False, label="Номер удостоверения"
-    )
 
     class Meta:
         model = Examination
         fields = [
             'previous_check_date', 'current_check_date', 'next_check_date',
-            'protocol_number', 'reason', 'commission', 'briefing', 'course'
+            'protocol_number', 'reason', 'commission', 'briefing', 'course',
+            'certificate_number'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -130,19 +121,14 @@ class ExaminationUpdateForm(forms.ModelForm):
         if self.instance and self.instance.examined:
             self.fields['full_name'].initial = (
                 self.instance.examined.full_name)
-            self.fields['position'].initial = (
-                self.instance.examined.position)
-            self.fields['brigade'].initial = (
-                self.instance.examined.brigade)
+            self.fields['position'].initial = self.instance.examined.position
+            self.fields['brigade'].initial = self.instance.examined.brigade
             self.fields['previous_safety_group'].initial = (
                 self.instance.examined.previous_safety_group)
             self.fields['safety_group'].initial = (
                 self.instance.examined.safety_group)
             self.fields['work_experience'].initial = (
                 self.instance.examined.work_experience)
-            if self.instance.course:
-                self.fields['certificate_number'].initial = (
-                    self.instance.course.certificate_number)
 
     def save(self, commit=True):
         examination = super().save(commit=False)
@@ -160,16 +146,6 @@ class ExaminationUpdateForm(forms.ModelForm):
             for key, value in examined_data.items():
                 setattr(examination.examined, key, value)
             examination.examined.save()
-
-        if self.cleaned_data.get('certificate_number'):
-            if (not examination.course or
-                    examination.course.certificate_number !=
-                    self.cleaned_data['certificate_number']):
-                course, created = Course.objects.get_or_create(
-                    certificate_number=self.cleaned_data[
-                        'certificate_number'
-                    ])
-                examination.course = course
 
         if commit:
             examination.save()

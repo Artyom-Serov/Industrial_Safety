@@ -11,7 +11,7 @@ class ExaminedAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_number', 'course_name', 'certificate_number')
+    list_display = ('course_number', 'course_name')
     list_filter = ('course_number', 'course_name')
 
 
@@ -19,7 +19,7 @@ class ExaminationAdmin(admin.ModelAdmin):
     list_display = (
         'created_at', 'current_check_date', 'next_check_date',
         'protocol_number', 'examined', 'commission', 'briefing',
-        'course'
+        'certificate_number', 'course'
     )
     list_filter = ('current_check_date', 'next_check_date')
 

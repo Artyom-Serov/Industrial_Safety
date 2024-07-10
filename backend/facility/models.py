@@ -149,14 +149,6 @@ class Course(models.Model):
         verbose_name="Наименование программы",
         help_text="Введите наименование программы"
     )
-    certificate_number = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True,
-        verbose_name="Номер удостоверения по специальности",
-        help_text="Введите номер удостоверения по специальности "
-                  "(при необходимости)"
-    )
 
     class Meta:
         verbose_name = "Программа обучения"
@@ -198,6 +190,14 @@ class Examination(models.Model):
         max_length=255,
         verbose_name="Причина проверки",
         help_text="Укажите причину проверки"
+    )
+    certificate_number = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="Номер удостоверения по специальности",
+        help_text="Введите номер удостоверения по специальности "
+                  "(при необходимости)"
     )
 
     commission = models.ForeignKey(
