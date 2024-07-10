@@ -79,11 +79,17 @@
           {{ form.work_experience }}
           {{ form.work_experience.help_text }}
         </div>
+        <div class="form-group">
+          <label for="{{ form.certificate_number.id_for_label }}">{{ form.certificate_number.label }}</label>
+          {{ form.certificate_number }}
+          {{ form.certificate_number.help_text }}
+        </div>
 
-        <button type="submit" class="btn btn-primary">Сохранить</button>
-        <a href="{% url 'facility:index' %}" class="btn btn-secondary">Отмена</a>
+        <button type="submit" class="button">Сохранить</button>
+        <button type="button">
+          <a href="{% url 'facility:index' %}" class="btn btn-secondary">Отмена</a>
+        </button>
       </form>
     </div>
   </div>
 {% endblock %}
-
