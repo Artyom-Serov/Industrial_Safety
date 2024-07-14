@@ -68,7 +68,7 @@
             {% if user.is_superuser %}
             <td>{{ examination.examined.company_name }}</td>
             {% endif %}
-            <td>{{ examination.created_at }}</td>
+            <td>{{ examination.created_at|date:"d.m.Y h:m" }}</td>
             <td>{{ examination.current_check_date|date:"d.m.Y" }}</td>
             <td>{{ examination.next_check_date|date:"d.m.Y" }}</td>
             <td>{{ examination.examined.full_name }}</td>
