@@ -14,7 +14,13 @@
       </div>
     {% endfor %}
     </div>
-    <a href="{% url 'users:register' %}">Добавить пользователя</a>
+    <div class="container" style="align-items: center;">
+      <p>
+      <button>
+        <a href="{% url 'users:register' %}">Добавить пользователя</a>
+      </button>
+    </div>
+
   {% else %}
   <h2 align="center">Информация о пользователе</h2>
   <div class="container">
