@@ -69,8 +69,8 @@
             <td>{{ examination.examined.company_name }}</td>
             {% endif %}
             <td>{{ examination.created_at }}</td>
-            <td>{{ examination.current_check_date }}</td>
-            <td>{{ examination.next_check_date }}</td>
+            <td>{{ examination.current_check_date|date:"d.m.Y" }}</td>
+            <td>{{ examination.next_check_date|date:"d.m.Y" }}</td>
             <td>{{ examination.examined.full_name }}</td>
             <td>{{ examination.examined.position }}</td>
             <td>{{ examination.examined.brigade }}</td>
@@ -83,7 +83,7 @@
             <td>{{ examination.commission.safety_officer_name }}</td>
             <td>{{ examination.commission.safety_officer_position }}</td>
             <td>{{ examination.reason }}</td>
-            <td>{{ examination.previous_check_date }}</td>
+            <td>{{ examination.previous_check_date|date:"d.m.Y" }}</td>
             <td>{{ examination.examined.previous_safety_group }}</td>
             <td>{{ examination.briefing }}</td>
             <td>{{ examination.course.course_number }}</td>
