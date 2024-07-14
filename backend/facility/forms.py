@@ -153,6 +153,14 @@ class ExaminationCreateForm(forms.ModelForm):
 
 
 class ExaminationUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Examination
+        fields = [
+            'previous_check_date', 'current_check_date', 'next_check_date',
+            'protocol_number', 'reason', 'briefing', 'course',
+            'certificate_number'
+        ]
+
     full_name = forms.CharField(max_length=255, label="ФИО проверяемого")
     position = forms.CharField(max_length=255, label="Должность проверяемого")
     brigade = forms.CharField(
@@ -167,13 +175,31 @@ class ExaminationUpdateForm(forms.ModelForm):
     )
     work_experience = forms.CharField(max_length=255, label="Стаж работы")
 
-    class Meta:
-        model = Examination
-        fields = [
-            'previous_check_date', 'current_check_date', 'next_check_date',
-            'protocol_number', 'reason', 'commission', 'briefing', 'course',
-            'certificate_number'
-        ]
+    chairman_name = forms.CharField(
+        max_length=255, label="ФИО председателя комиссии"
+    )
+    chairman_position = forms.CharField(
+        max_length=255, label="Должность председателя комиссии"
+    )
+    member1_name = forms.CharField(
+        max_length=255, label="ФИО первого члена комиссии"
+    )
+    member1_position = forms.CharField(
+        max_length=255, label="Должность первого члена комиссии"
+    )
+    member2_name = forms.CharField(
+        max_length=255, label="ФИО второго члена комиссии"
+    )
+    member2_position = forms.CharField(
+        max_length=255, label="Должность второго члена комиссии"
+    )
+    safety_officer_name = forms.CharField(
+        max_length=255, label="ФИО ответственного за электробезопасность"
+    )
+    safety_officer_position = forms.CharField(
+        max_length=255,
+        label="Должность ответственного за электробезопасность"
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -189,6 +215,24 @@ class ExaminationUpdateForm(forms.ModelForm):
             self.fields['work_experience'].initial = (
                 self.instance.examined.work_experience)
 
+        if self.instance and self.instance.commission:
+            self.fields['chairman_name'].initial = (
+                self.instance.commission.chairman_name)
+            self.fields['chairman_position'].initial = (
+                self.instance.commission.chairman_position)
+            self.fields['member1_name'].initial = (
+                self.instance.commission.member1_name)
+            self.fields['member1_position'].initial = (
+                self.instance.commission.member1_position)
+            self.fields['member2_name'].initial = (
+                self.instance.commission.member2_name)
+            self.fields['member2_position'].initial = (
+                self.instance.commission.member2_position)
+            self.fields['safety_officer_name'].initial = (
+                self.instance.commission.safety_officer_name)
+            self.fields['safety_officer_position'].initial = (
+                self.instance.commission.safety_officer_position)
+
     def save(self, commit=True):
         examination = super().save(commit=False)
         examined_data = {
@@ -201,10 +245,28 @@ class ExaminationUpdateForm(forms.ModelForm):
             'safety_group': self.cleaned_data['safety_group'],
             'work_experience': self.cleaned_data['work_experience'],
         }
+        commission_data = {
+            'chairman_name': self.cleaned_data['chairman_name'],
+            'chairman_position': self.cleaned_data['chairman_position'],
+            'member1_name': self.cleaned_data['member1_name'],
+            'member1_position': self.cleaned_data['member1_position'],
+            'member2_name': self.cleaned_data['member2_name'],
+            'member2_position': self.cleaned_data['member2_position'],
+            'safety_officer_name': self.cleaned_data['safety_officer_name'],
+            'safety_officer_position': self.cleaned_data[
+                'safety_officer_position'
+            ],
+        }
+
         if examination.examined:
             for key, value in examined_data.items():
                 setattr(examination.examined, key, value)
             examination.examined.save()
+
+        if examination.commission:
+            for key, value in commission_data.items():
+                setattr(examination.commission, key, value)
+            examination.commission.save()
 
         if commit:
             examination.save()
