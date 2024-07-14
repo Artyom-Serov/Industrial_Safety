@@ -49,8 +49,7 @@ def create_examination(request):
     if request.method == 'POST':
         form = ExaminationCreateForm(request.POST, user=request.user)
         if form.is_valid():
-            examination = form.save(commit=False)
-            examination.save()
+            form.save()
             return redirect('facility:index')
     else:
         form = ExaminationCreateForm(user=request.user)

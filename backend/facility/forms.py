@@ -1,5 +1,5 @@
 from django import forms
-from .models import Examination, Examined, Course
+from .models import Examination, Examined, Commission
 from users.models import User, Organization
 
 
@@ -8,7 +8,7 @@ class ExaminationCreateForm(forms.ModelForm):
         model = Examination
         fields = [
             'previous_check_date', 'current_check_date', 'next_check_date',
-            'protocol_number', 'reason', 'commission', 'briefing', 'course',
+            'protocol_number', 'reason', 'briefing', 'course',
             'certificate_number'
         ]
 
@@ -24,14 +24,14 @@ class ExaminationCreateForm(forms.ModelForm):
     )
     brigade = forms.CharField(
         max_length=255,
-        label="Участок (бригада) проверяемого",
-        help_text="Введите участок или бригаду проверяемого"
+        label="Цех (участок) проверяемого",
+        help_text="Укажите цех или участок проверяемого"
     )
     previous_safety_group = forms.CharField(
         max_length=255,
         required=False,
         label="Предыдущая группа электробезопасности",
-        help_text="Предыдущая группа электробезопасности "
+        help_text="Укажите предыдущую группу электробезопасности "
                   "(обязательно при указании даты предыдущей проверки)"
     )
     safety_group = forms.CharField(
@@ -45,6 +45,48 @@ class ExaminationCreateForm(forms.ModelForm):
         help_text="Введите стаж работы"
     )
 
+    chairman_name = forms.CharField(
+        max_length=255,
+        label="ФИО председателя комиссии",
+        help_text="Введите фамилию, имя и отчество председателя комиссии"
+    )
+    chairman_position = forms.CharField(
+        max_length=255,
+        label="Должность председателя комиссии",
+        help_text="Введите должность председателя комиссии"
+    )
+    member1_name = forms.CharField(
+        max_length=255,
+        label="ФИО первого члена комиссии",
+        help_text="Введите фамилию, имя и отчество первого члена комиссии"
+    )
+    member1_position = forms.CharField(
+        max_length=255,
+        label="Должность первого члена комиссии",
+        help_text="Введите должность первого члена комиссии"
+    )
+    member2_name = forms.CharField(
+        max_length=255,
+        label="ФИО второго члена комиссии",
+        help_text="Введите фамилию, имя и отчество второго члена комиссии"
+    )
+    member2_position = forms.CharField(
+        max_length=255,
+        label="Должность второго члена комиссии",
+        help_text="Введите должность второго члена комиссии"
+    )
+    safety_officer_name = forms.CharField(
+        max_length=255,
+        label="ФИО ответственного за электробезопасность",
+        help_text="Введите фамилию, имя и отчество ответственного "
+                  "за электробезопасность"
+    )
+    safety_officer_position = forms.CharField(
+        max_length=255,
+        label="Должность ответственного за электробезопасность",
+        help_text="Введите должность ответственного за электробезопасность"
+    )
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ExaminationCreateForm, self).__init__(*args, **kwargs)
@@ -56,12 +98,12 @@ class ExaminationCreateForm(forms.ModelForm):
                 self.fields['company_name'] = forms.ModelChoiceField(
                     queryset=Organization.objects.all(),
                     label="Наименование компании",
-                    help_text="Выберите наименование компании"
+                    help_text="Укажите компанию аттестуемого и автора записи"
                 )
                 self.fields['user'] = forms.ModelChoiceField(
                     queryset=User.objects.all(),
                     label="Пользователь",
-                    help_text="Пользователь, создавший запись"
+                    help_text="Укажите автора записи"
                 )
             else:
                 self.company_name = user.organization
@@ -88,7 +130,24 @@ class ExaminationCreateForm(forms.ModelForm):
             examined.user = self.user
 
         examined.save()
+
+        commission = Commission(
+            chairman_name=self.cleaned_data['chairman_name'],
+            chairman_position=self.cleaned_data['chairman_position'],
+            member1_name=self.cleaned_data['member1_name'],
+            member1_position=self.cleaned_data['member1_position'],
+            member2_name=self.cleaned_data['member2_name'],
+            member2_position=self.cleaned_data['member2_position'],
+            safety_officer_name=self.cleaned_data['safety_officer_name'],
+            safety_officer_position=self.cleaned_data[
+                'safety_officer_position'
+            ]
+        )
+
+        commission.save()
+
         instance.examined = examined
+        instance.commission = commission
         instance.save()
         return instance
 
