@@ -10,6 +10,9 @@
         <div class="form-group">
           <label for="{{ form.previous_check_date.id_for_label }}">{{ form.previous_check_date.label }}</label>
           {{ form.previous_check_date }}
+          {% if form.previous_check_date.errors %}
+            <div class="error-message">{{ form.previous_check_date.errors }}</div>
+          {% endif %}
           <p>
           <label for="{{ form.current_check_date.id_for_label }}">{{ form.current_check_date.label }}</label>
           {{ form.current_check_date }}
@@ -48,6 +51,9 @@
           <p>
           <label for="{{ form.previous_safety_group.id_for_label }}">{{ form.previous_safety_group.label }}</label>
           {{ form.previous_safety_group }}
+          {% if form.previous_safety_group.errors %}
+            <div class="error-message">{{ form.previous_safety_group.errors }}</div>
+          {% endif %}
           <p>
           <label for="{{ form.safety_group.id_for_label }}">{{ form.safety_group.label }}</label>
           {{ form.safety_group }}

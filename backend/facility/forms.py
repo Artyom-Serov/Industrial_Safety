@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Examination, Examined, Commission
 from users.models import User, Organization
 
@@ -108,6 +109,19 @@ class ExaminationCreateForm(forms.ModelForm):
             else:
                 self.company_name = user.organization
                 self.user = user
+
+    def clean(self):
+        cleaned_data = super().clean()
+        previous_check_date = cleaned_data.get('previous_check_date')
+        previous_safety_group = cleaned_data.get('previous_safety_group')
+
+        if previous_check_date and not previous_safety_group:
+            self.add_error('previous_safety_group',
+                           'Предыдущая группа электробезопасности обязательна при указании даты предыдущей проверки.')
+
+        if previous_safety_group and not previous_check_date:
+            self.add_error('previous_check_date',
+                           'Дата проведения предыдущей проверки обязательна при указании предыдущей группы электробезопасности.')
 
     def save(self, commit=True):
         instance = super(ExaminationCreateForm, self).save(commit=False)
@@ -232,6 +246,19 @@ class ExaminationUpdateForm(forms.ModelForm):
                 self.instance.commission.safety_officer_name)
             self.fields['safety_officer_position'].initial = (
                 self.instance.commission.safety_officer_position)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        previous_check_date = cleaned_data.get('previous_check_date')
+        previous_safety_group = cleaned_data.get('previous_safety_group')
+
+        if previous_check_date and not previous_safety_group:
+            self.add_error('previous_safety_group',
+                           'Предыдущая группа электробезопасности обязательна при указании даты предыдущей проверки.')
+
+        if previous_safety_group and not previous_check_date:
+            self.add_error('previous_check_date',
+                           'Дата проведения предыдущей проверки обязательна при указании предыдущей группы электробезопасности.')
 
     def save(self, commit=True):
         examination = super().save(commit=False)

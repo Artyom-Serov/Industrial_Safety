@@ -1,6 +1,6 @@
 from django.db import models
-from django.conf import settings
-from django.core.exceptions import ValidationError
+# from django.conf import settings
+# from django.core.exceptions import ValidationError
 from users.models import User, Organization
 
 
@@ -233,9 +233,9 @@ class Examination(models.Model):
     def __str__(self):
         return f"Проверка {self.protocol_number}"
 
-    def clean(self):
-        if self.previous_check_date and not self.examined.previous_safety_group:
-            raise ValidationError(
-                'Предыдущая группа электробезопасности обязательна '
-                'при указании даты предыдущей проверки.'
-            )
+    # def clean(self):
+    #     if self.previous_check_date and self.examined_id and not self.examined.previous_safety_group:
+    #         raise ValidationError(
+    #             'Предыдущая группа электробезопасности обязательна '
+    #             'при указании даты предыдущей проверки.'
+    #         )
