@@ -32,6 +32,9 @@
         <thead>
           <tr>
             <th><a href="?{% if request.GET.order_by == 'protocol_number' %}order_by=-protocol_number{% else %}order_by=protocol_number{% endif %}">Номер протокола</th>
+            {% if user.is_superuser %}
+            <th>Компания</th>
+            {% endif %}
             <th><a href="?{% if request.GET.order_by == 'created_at' %}order_by=-created_at{% else %}order_by=created_at{% endif %}">Дата записи</th>
             <th><a href="?{% if request.GET.order_by == 'current_check_date' %}order_by=-current_check_date{% else %}order_by=current_check_date{% endif %}">Дата текущей проверки</th>
             <th><a href="?{% if request.GET.order_by == 'next_check_date' %}order_by=-next_check_date{% else %}order_by=next_check_date{% endif %}">Дата следующей проверки</th>
@@ -62,6 +65,9 @@
           {% for examination in examinations %}
           <tr>
             <td>{{ examination.protocol_number }}</td>
+            {% if user.is_superuser %}
+            <td>{{ examination.examined.company_name }}</td>
+            {% endif %}
             <td>{{ examination.created_at }}</td>
             <td>{{ examination.current_check_date }}</td>
             <td>{{ examination.next_check_date }}</td>
