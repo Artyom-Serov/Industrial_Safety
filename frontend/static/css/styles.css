@@ -1,4 +1,12 @@
+@font-face {
+    font-family: 'GOST_Font';
+    src: url('../fonts/gost_2.304.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
+    /*font-family: 'GOST_Font', sans-serif; */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -13,12 +21,14 @@ body {
 }
 
 header {
+    font-family: 'GOST_Font', sans-serif;
     background: rgba(32, 178, 170, 0.4);
     padding: 0;
     text-align: center;
 }
 
 main {
+    /*font-family: 'GOST_Font', sans-serif; */
     flex: 1;
     padding: 30px;
     width: 98%;
@@ -27,6 +37,7 @@ main {
 }
 
 footer {
+    font-family: 'GOST_Font', sans-serif;
     background: rgba(32, 178, 170, 0.3);
     padding: 0;
     text-align: center;
