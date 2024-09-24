@@ -63,12 +63,29 @@ TEMPLATES = [
 WSGI_APPLICATION = "backend.wsgi.application"
 
 # Database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+DB_ENGINE = env("DB_ENGINE", default="sqlite")
+
+if DB_ENGINE == "sqlite":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / env("DB_NAME", default="db.sqlite3"),
+        }
     }
-}
+elif DB_ENGINE == "postgresql":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("POSTGRES_DB", default="django"),
+            "USER": env("POSTGRES_USER", default="django"),
+            "PASSWORD": env("POSTGRES_PASSWORD", default=""),
+            "HOST": env("POSTGRES_HOST", default="db"),
+            "PORT": env("POSTGRES_PORT", default="5432")
+        }
+    }
+else:
+    raise ValueError('Неподдерживаемое значение DB_ENGINE.'
+                     'Используйте "sqlite" или "postgresql".')
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
