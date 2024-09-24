@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
-from .models import Examination, Examined, Commission, Briefing, Course
+from .models import Examination
 from .forms import ExaminationCreateForm, ExaminationUpdateForm
 
 

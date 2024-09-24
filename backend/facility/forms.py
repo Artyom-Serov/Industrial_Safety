@@ -1,5 +1,5 @@
 from django import forms
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 from .models import Examination, Examined, Commission
 from users.models import User, Organization
 
