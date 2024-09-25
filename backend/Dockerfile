@@ -1,4 +1,17 @@
-FROM ubuntu:latest
-LABEL authors="berlioz"
+FROM python:3.9
 
-ENTRYPOINT ["top", "-b"]
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt --no-cache-dir
+
+COPY . .
+
+RUN python manage.py collectstatic --noinput
+
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "backend.wsgi:application"]
