@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13.10
+    container_name: lp_db
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - lp_data:/var/lib/postgresql/data
+    networks:
+      - backend_network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: lp_backend
+    command: >
+      sh -c "sleep 12 && \
+            python manage.py migrate && \
+            python manage.py collectstatic --noinput && \
+            cp -r /app/collected_static/. /backend_static/static/ && \
+            gunicorn --bind 0.0.0.0:8000 backend.wsgi:application"
+    volumes:
+      - static:/backend_static
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - backend_network
+
+  nginx:
+    build:
+      context: ./web
+    container_name: lp_nginx
+    restart: always
+    volumes:
+      - static:/staticfiles
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+      - backend
+    networks:
+      - backend_network
+
+volumes:
+  lp_data:
+  static:
+
+networks:
+  backend_network:
+    driver: bridge
