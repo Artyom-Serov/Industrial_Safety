@@ -12,3 +12,6 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
+RUN python manage.py collectstatic --noinput
+
+CMD ["echo", "Контейнер backend подготовлен к запуску"]
