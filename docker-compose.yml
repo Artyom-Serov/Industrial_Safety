@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   db:
@@ -17,17 +16,31 @@ services:
       context: ./backend
     container_name: lp_backend
     command: >
-      sh -c "sleep 12 && \
+      sh -c "sleep 10 && \
+            cp -r /app/collected_static/. /backend_static/ && \
             python manage.py migrate && \
-            python manage.py collectstatic --noinput && \
-            cp -r /app/collected_static/. /backend_static/static/ && \
             gunicorn --bind 0.0.0.0:8000 backend.wsgi:application"
     volumes:
       - static:/backend_static
+      - templates:/frontend/templates
     env_file:
       - .env
     depends_on:
       - db
+    networks:
+      - backend_network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: lp_frontend
+    command: >
+      sh -c "cp -r /frontend/static/. /frontend_static/"
+    volumes:
+      - static:/frontend_static
+      - templates:/frontend/templates
+    depends_on:
+      - backend
     networks:
       - backend_network
 
@@ -38,6 +51,7 @@ services:
     restart: always
     volumes:
       - static:/staticfiles
+      - templates:/usr/share/nginx/html/templates
     ports:
       - "8000:80"
     depends_on:
@@ -49,6 +63,7 @@ services:
 volumes:
   lp_data:
   static:
+  templates:
 
 networks:
   backend_network:
