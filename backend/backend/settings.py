@@ -15,11 +15,12 @@ env_file = Path(__file__).resolve().parent.parent.parent / '.env'
 if env_file.exists():
     environ.Env.read_env(env_file)
 
-SECRET_KEY = env('SECRET_KEY', default='django-insecure')
+SECRET_KEY = env("SECRET_KEY", default="django-insecure")
 
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -113,13 +114,13 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'collected_static'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "collected_static"
 # STATICFILES_DIRS = [BASE_DIR.parent / 'frontend/static']
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
-LOGIN_URL = 'login'
+LOGIN_URL = "login"

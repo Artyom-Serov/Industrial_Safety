@@ -51,7 +51,6 @@ services:
     restart: always
     volumes:
       - static:/staticfiles
-      - templates:/usr/share/nginx/html/templates
     ports:
       - "8000:80"
     depends_on:
