@@ -117,6 +117,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "collected_static"
+# заглушить следующую строку при упаковке в docker
 # STATICFILES_DIRS = [BASE_DIR.parent / 'frontend/static']
 
 # Default primary key field type
