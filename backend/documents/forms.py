@@ -15,12 +15,8 @@ TEMPLATE_CHOICES = [
      'Удостоверение проверки по электробезопасности'),
 ]
 
-FILE_FORMAT_CHOICES = [
-    ('docx', 'DOCX'),
-    ('pdf', 'PDF'),
-]
-
 
 class DocumentGenerationForm(forms.Form):
-    template = forms.ChoiceField(choices=TEMPLATE_CHOICES, label='Шаблон документа')
-    file_format = forms.ChoiceField(choices=FILE_FORMAT_CHOICES, label='Формат файла')
+    template = forms.ChoiceField(
+        choices=TEMPLATE_CHOICES, label='Шаблон документа'
+    )
