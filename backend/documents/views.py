@@ -9,17 +9,27 @@ from facility.models import Examination
 
 
 def document_generate_view(request, examination_id):
-    # получаем запись проверки
+    """
+    Обрабатывает запрос на генерацию документа для выбранной записи проверки.
+
+    Получает информацию о проверке из модели Examination по идентификатору.
+    Затем обрабатывает POST-запрос с формой выбора шаблона,
+    генерирует документ в формате .docx и отправляет его пользователю для
+    загрузки.
+
+    Параметры:
+    - request: HttpRequest объект, содержащий данные запроса.
+    - examination_id: int, идентификатор проверки в базе данных.
+
+    Возвращает:
+    - HttpResponse с прикрепленным документом в формате .docx для загрузки.
+    """
     examination = Examination.objects.get(id=examination_id)
 
-    # обработка формы
     if request.method == 'POST':
         form = DocumentGenerationForm(request.POST)
         if form.is_valid():
-            # получаем выбранный шаблон
             template = form.cleaned_data['template']
-
-            # путь к шаблону и временное имя файла для сохранения
             template_path = os.path.join(
                 settings.BASE_DIR, 'documents', 'templates',
                 f"{template}.docx"
@@ -30,10 +40,8 @@ def document_generate_view(request, examination_id):
             )
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-            # генерация документа в формате .docx
             generate_document(examination_id, template_path, output_path)
 
-            # отправляем сгенерированный файл в ответ
             with open(output_path, 'rb') as file:
                 response = HttpResponse(
                     file.read(),

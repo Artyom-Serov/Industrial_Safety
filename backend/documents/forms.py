@@ -17,6 +17,13 @@ TEMPLATE_CHOICES = [
 
 
 class DocumentGenerationForm(forms.Form):
+    """
+    Форма выбора шаблона для генерации документа.
+
+    Поля:
+    - template: ChoiceField — поле для выбора шаблона документа.
+        Шаблон указывается из списка TEMPLATE_CHOICES.
+    """
     template = forms.ChoiceField(
         choices=TEMPLATE_CHOICES, label='Шаблон документа'
     )
