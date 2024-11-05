@@ -2,6 +2,7 @@
 Django settings for backend project.
 """
 import os
+from dis import CACHE
 from pathlib import Path
 import environ
 
@@ -126,3 +127,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
 LOGIN_URL = "login"
+
+CACHE = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+CACHE_TTL = 300
