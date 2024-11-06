@@ -1,5 +1,7 @@
+"""
+Модуль моделей управления проверками.
+"""
 from django.db import models
-# from django.conf import settings
 # from django.core.exceptions import ValidationError
 from users.models import User, Organization
 

@@ -1,3 +1,7 @@
+"""
+Модуль форм для управления проверками, аттестуемыми и комиссией.
+"""
+
 from django import forms
 # from django.core.exceptions import ValidationError
 from .models import Examination, Examined, Commission
@@ -5,6 +9,11 @@ from users.models import User, Organization
 
 
 class ExaminationCreateForm(forms.ModelForm):
+    """
+    Форма для создания записи о проверке, включая информацию об аттестуемом и
+    комиссии. Обрабатывает данные о предыдущей и текущей проверке, а также о
+    членах комиссии. Поддерживает создание объектов Examined и Commission.
+    """
     class Meta:
         model = Examination
         fields = [
@@ -13,6 +22,7 @@ class ExaminationCreateForm(forms.ModelForm):
             'certificate_number'
         ]
 
+    # Поля формы для данных об аттестуемом
     full_name = forms.CharField(
         max_length=255,
         label="ФИО проверяемого",
@@ -45,7 +55,7 @@ class ExaminationCreateForm(forms.ModelForm):
         label="Стаж работы",
         help_text="Введите стаж работы"
     )
-
+    # Поля формы для данных о членах комиссии
     chairman_name = forms.CharField(
         max_length=255,
         label="ФИО председателя комиссии",
@@ -89,6 +99,10 @@ class ExaminationCreateForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """
+        Инициализирует форму создания проверки, добавляя поля для выбора
+        компании и пользователя, если пользователь — суперпользователь.
+        """
         user = kwargs.pop('user', None)
         super(ExaminationCreateForm, self).__init__(*args, **kwargs)
 
@@ -111,19 +125,31 @@ class ExaminationCreateForm(forms.ModelForm):
                 self.user = user
 
     def clean(self):
+        """
+        Проверка валидности данных формы. Убедитесь, что
+        дата предыдущей проверки и предыдущая группа электробезопасности
+        указаны, если одно из полей заполнено.
+        """
         cleaned_data = super().clean()
         previous_check_date = cleaned_data.get('previous_check_date')
         previous_safety_group = cleaned_data.get('previous_safety_group')
 
         if previous_check_date and not previous_safety_group:
             self.add_error('previous_safety_group',
-                           'Предыдущая группа электробезопасности обязательна при указании даты предыдущей проверки.')
+                           'Предыдущая группа электробезопасности обязательна'
+                           'при указании даты предыдущей проверки.')
 
         if previous_safety_group and not previous_check_date:
             self.add_error('previous_check_date',
-                           'Дата проведения предыдущей проверки обязательна при указании предыдущей группы электробезопасности.')
+                           'Дата проведения предыдущей проверки обязательна'
+                           'при указании предыдущей группы'
+                           'электробезопасности.')
 
     def save(self, commit=True):
+        """
+        Сохраняет запись о проверке, создает объекты Examined и Commission
+        для текущей проверки.
+        """
         instance = super(ExaminationCreateForm, self).save(commit=False)
 
         examined = Examined(
@@ -167,6 +193,11 @@ class ExaminationCreateForm(forms.ModelForm):
 
 
 class ExaminationUpdateForm(forms.ModelForm):
+    """
+    Форма для обновления информации о проверке, аттестуемом и комиссии.
+    Загружает существующие данные для редактирования, обновляет связанные
+    объекты Examined и Commission.
+    """
     class Meta:
         model = Examination
         fields = [
@@ -175,6 +206,7 @@ class ExaminationUpdateForm(forms.ModelForm):
             'certificate_number'
         ]
 
+    # Поля формы для данных об аттестуемом
     full_name = forms.CharField(max_length=255, label="ФИО проверяемого")
     position = forms.CharField(max_length=255, label="Должность проверяемого")
     brigade = forms.CharField(
@@ -188,7 +220,7 @@ class ExaminationUpdateForm(forms.ModelForm):
         max_length=255, label="Группа электробезопасности"
     )
     work_experience = forms.CharField(max_length=255, label="Стаж работы")
-
+    # Поля формы для данных о членах комиссии
     chairman_name = forms.CharField(
         max_length=255, label="ФИО председателя комиссии"
     )
@@ -216,6 +248,11 @@ class ExaminationUpdateForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        """
+        Инициализирует форму обновления проверки, заполняя поля начальными
+        значениями из существующих объектов Examined и Commission, если они
+        связаны с текущей записью.
+        """
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.examined:
             self.fields['full_name'].initial = (
@@ -248,19 +285,30 @@ class ExaminationUpdateForm(forms.ModelForm):
                 self.instance.commission.safety_officer_position)
 
     def clean(self):
+        """
+        Валидирует данные, проверяя наличие предыдущей даты и группы при
+        необходимости.
+        """
         cleaned_data = super().clean()
         previous_check_date = cleaned_data.get('previous_check_date')
         previous_safety_group = cleaned_data.get('previous_safety_group')
 
         if previous_check_date and not previous_safety_group:
             self.add_error('previous_safety_group',
-                           'Предыдущая группа электробезопасности обязательна при указании даты предыдущей проверки.')
+                           'Предыдущая группа электробезопасности обязательна'
+                           'при указании даты предыдущей проверки.')
 
         if previous_safety_group and not previous_check_date:
             self.add_error('previous_check_date',
-                           'Дата проведения предыдущей проверки обязательна при указании предыдущей группы электробезопасности.')
+                           'Дата проведения предыдущей проверки обязательна'
+                           'при указании предыдущей группы'
+                           'электробезопасности.')
 
     def save(self, commit=True):
+        """
+        Сохраняет изменения в записи о проверке и обновляет объекты Examined
+        и Commission.
+        """
         examination = super().save(commit=False)
         examined_data = {
             'full_name': self.cleaned_data['full_name'],
