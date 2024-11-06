@@ -1,3 +1,7 @@
+"""
+Модул представлений, управляющих пользователями и организациями.
+"""
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -7,6 +11,18 @@ from .models import User, Organization
 
 
 def user_login(request):
+    """
+    Обрабатывает вход пользователя, проверяя имя пользователя, пароль и
+    организацию. При успешной аутентификации перенаправляет на
+    главную страницу приложения.
+
+    Параметры:
+        request (HttpRequest): Объект запроса.
+
+    Возвращает:
+        HttpResponse: Рендер шаблона страницы входа с сообщением об ошибке
+        при неудачной попытке входа.
+    """
     template = 'users/login.html'
     organizations = Organization.objects.all()
     if request.method == 'POST':
@@ -23,12 +39,24 @@ def user_login(request):
             login(request, user)
             return redirect('facility:index')
         else:
-            messages.error(request, 'Неверные имя пользователя, пароль или организация.')
+            messages.error(
+                request, 'Неверные имя пользователя, пароль или организация.'
+            )
     return render(request, template, {'organizations': organizations})
 
 
 @login_required
 def user_profile(request):
+    """
+    Отображает профиль текущего пользователя. Если пользователь — администратор,
+    также отображает список всех пользователей.
+
+    Параметры:
+        request (HttpRequest): Объект запроса.
+
+    Возвращает:
+        HttpResponse: Рендер шаблона страницы профиля пользователя.
+    """
     template = 'users/profile.html'
     if request.user.is_superuser:
         users = User.objects.all()
@@ -39,6 +67,16 @@ def user_profile(request):
 
 @login_required
 def edit_profile(request):
+    """
+    Обрабатывает редактирование профиля текущего пользователя. При успешной
+    валидации формы сохраняет изменения и перенаправляет на профиль пользователя.
+
+    Параметры:
+        request (HttpRequest): Объект запроса.
+
+    Возвращает:
+        HttpResponse: Рендер шаблона редактирования профиля.
+    """
     template = 'users/edit_profile.html'
     if request.method == 'POST':
         form = CustomUserEditForm(request.POST, instance=request.user)
@@ -52,6 +90,17 @@ def edit_profile(request):
 
 @login_required
 def admin_edit_user_profile(request, user_id):
+    """
+    Позволяет администратору редактировать профиль любого пользователя.
+
+    Параметры:
+        request (HttpRequest): Объект запроса.
+        user_id (int): Идентификатор пользователя для редактирования.
+
+    Возвращает:
+        HttpResponse: Рендер шаблона редактирования профиля указанного
+        пользователя.
+    """
     user = get_object_or_404(User, id=user_id)
     template = 'users/edit_profile.html'
     if request.method == 'POST':
@@ -65,11 +114,30 @@ def admin_edit_user_profile(request, user_id):
 
 
 def is_admin(user):
+    """
+    Проверяет, является ли пользователь администратором.
+
+    Параметры:
+        user (User): Пользователь для проверки.
+
+    Возвращает:
+        bool: True, если пользователь — администратор, иначе False.
+    """
     return user.is_superuser
 
 
 @user_passes_test(is_admin)
 def user_register(request):
+    """
+    Обрабатывает регистрацию нового пользователя с возможностью выбора или
+    создания новой организации. Доступно только для администраторов.
+
+    Параметры:
+        request (HttpRequest): Объект запроса.
+
+    Возвращает:
+        HttpResponse: Рендер шаблона регистрации пользователя.
+    """
     template = 'users/register.html'
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -82,5 +150,15 @@ def user_register(request):
 
 
 def user_logout(request):
+    """
+    Выполняет перенаправление пользователя на страницу входа при его выходе
+    из системы.
+
+    Параметры:
+        request (HttpRequest): Объект запроса.
+
+    Возвращает:
+        HttpResponseRedirect: Перенаправление на страницу входа.
+    """
     logout(request)
     return redirect('users:login')
