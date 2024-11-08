@@ -65,8 +65,13 @@ def user_profile(request):
         HttpResponse: Рендер шаблона страницы профиля пользователя.
     """
     template = 'users/profile.html'
+
     if request.user.is_superuser:
-        users = User.objects.all()
+        # users = User.objects.all()
+        users = cache.get('all_users')
+        if not users:
+            users = User.objects.all()
+            cache.set('all_users', users, timeout=CACHE_TTL)
     else:
         users = None
     return render(request, template, {'user': request.user, 'users': users})
