@@ -1,8 +1,9 @@
 """
 Django settings for backend project.
 """
+
 import os
-from dis import CACHE
+
 from pathlib import Path
 import environ
 
@@ -90,7 +91,6 @@ else:
     raise ValueError('Неподдерживаемое значение DB_ENGINE.'
                      'Используйте "sqlite" или "postgresql".')
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -106,7 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
 LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "Asia/Yekaterinburg"
@@ -121,7 +120,6 @@ STATIC_ROOT = BASE_DIR / "collected_static"
 # заглушить следующую строку при упаковке в docker
 # STATICFILES_DIRS = [BASE_DIR.parent / 'frontend/static']
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
@@ -138,4 +136,4 @@ CACHE = {
     }
 }
 
-CACHE_TTL = 300
+CACHE_TTL = env("CACHE_TIME", default=300)
