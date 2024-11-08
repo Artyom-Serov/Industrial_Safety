@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.cache import cache
+from backend.settings import CACHE_TTL
 from .forms import CustomUserCreationForm, CustomUserEditForm
 from .models import User, Organization
 
@@ -24,7 +26,12 @@ def user_login(request):
         при неудачной попытке входа.
     """
     template = 'users/login.html'
-    organizations = Organization.objects.all()
+    # organizations = Organization.objects.all()
+    organizations = cache.get('organizations')
+    if not organizations:
+        organizations = Organization.objects.all()
+        cache.set('organizations', organizations, timeout=CACHE_TTL)
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
