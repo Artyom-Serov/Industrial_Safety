@@ -3,11 +3,11 @@
 """
 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.cache import cache
-from backend.settings import CACHE_TTL
 from .forms import CustomUserCreationForm, CustomUserEditForm
 from .models import User, Organization
 
@@ -30,7 +30,7 @@ def user_login(request):
     organizations = cache.get('organizations')
     if not organizations:
         organizations = Organization.objects.all()
-        cache.set('organizations', organizations, timeout=CACHE_TTL)
+        cache.set('organizations', organizations, timeout=settings.CACHE_TTL)
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -71,7 +71,7 @@ def user_profile(request):
         users = cache.get('all_users')
         if not users:
             users = User.objects.all()
-            cache.set('all_users', users, timeout=CACHE_TTL)
+            cache.set('all_users', users, timeout=settings.CACHE_TTL)
     else:
         users = None
     return render(request, template, {'user': request.user, 'users': users})

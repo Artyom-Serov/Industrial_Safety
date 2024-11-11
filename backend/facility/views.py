@@ -3,10 +3,10 @@
 """
 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.views.generic import ListView
-from backend.settings import CACHE_TTL
 from .models import Examination
 from .forms import ExaminationCreateForm, ExaminationUpdateForm
 
@@ -92,7 +92,7 @@ class IndexView(ListView):
                 )
 
             queryset = queryset.order_by(order_by)
-            cache.set(cache_key, queryset, timeout=CACHE_TTL)
+            cache.set(cache_key, queryset, timeout=settings.CACHE_TTL)
 
         return queryset
 
