@@ -34,7 +34,6 @@ class IndexView(ListView):
     context_object_name = 'examinations'
     ordering = ['-created_at']
 
-    @property
     def get_queryset(self):
         """
         Получает фильтрованный список проверок в зависимости от параметров
@@ -52,6 +51,10 @@ class IndexView(ListView):
             - queryset: Отфильтрованный и отсортированный список проверок.
         """
         user = self.request.user
+
+        if not user.is_authenticated:
+            return Examination.objects.none()
+
         cache_key = (f'examinations_{user.id}_filters_'
                      f'{self.request.GET.urlencode()}')
         queryset = cache.get(cache_key)
