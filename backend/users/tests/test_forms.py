@@ -90,3 +90,13 @@ class CustomUserEditFormTest(TestCase):
         user = form.save()
         self.assertEqual(user.organization.name, 'Updated organization')
         self.assertEqual(Organization.objects.count(), 2)
+
+    def test_form_invalid_with_mismatched_passwords(self):
+        # тестирование не валидности формы при несовпадении паролей
+        data = self.valid_data.copy()
+        data['password1'] = 'newpassword123'
+        data['password2'] = 'differentpassword123'
+        form = CustomUserEditForm(data, instance=self.user)
+        self.assertFalse(form.is_valid())
+        self.assertIn('password2', form.errors)
+        self.assertEqual(form.errors['password2'], ["Пароли не совпадают."])

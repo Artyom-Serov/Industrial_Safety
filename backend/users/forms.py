@@ -89,6 +89,17 @@ class CustomUserEditForm(forms.ModelForm):
         self.fields['organization'].label = ("Наименование организации"
                                              "(если выбрано)")
 
+    def clean(self):
+        """Проверка совпадения паролей."""
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', "Пароли не совпадают.")
+
+        return cleaned_data
+
     def save(self, commit=True):
         """
         Переопределение метода сохранения для добавления новой организации,
