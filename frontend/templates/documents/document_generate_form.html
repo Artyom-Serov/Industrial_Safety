@@ -4,7 +4,7 @@
 <h2 align="center">Генерация документа</h2>
 <div class="container">
     <div class="item">
-    <p>Проверка: №{{ examination }} </p>
+    <p>Протокол проверки: №{{ examination.protocol_number }} </p>
       <form method="POST" class="mt-4">
         {% csrf_token %}
         <div class="form-group">
