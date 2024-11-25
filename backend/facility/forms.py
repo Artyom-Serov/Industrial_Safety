@@ -3,7 +3,6 @@
 """
 
 from django import forms
-# from django.core.exceptions import ValidationError
 from .models import Examination, Examined, Commission
 from users.models import User, Organization
 
@@ -136,14 +135,14 @@ class ExaminationCreateForm(forms.ModelForm):
 
         if previous_check_date and not previous_safety_group:
             self.add_error('previous_safety_group',
-                           'Предыдущая группа электробезопасности обязательна'
-                           'при указании даты предыдущей проверки.')
+                           "Предыдущая группа электробезопасности обязательна"
+                           "при указании даты предыдущей проверки.")
 
         if previous_safety_group and not previous_check_date:
             self.add_error('previous_check_date',
-                           'Дата проведения предыдущей проверки обязательна'
-                           'при указании предыдущей группы'
-                           'электробезопасности.')
+                           "Дата проведения предыдущей проверки обязательна"
+                           "при указании предыдущей группы"
+                           "электробезопасности.")
 
     def save(self, commit=True):
         """
@@ -254,35 +253,33 @@ class ExaminationUpdateForm(forms.ModelForm):
         связаны с текущей записью.
         """
         super().__init__(*args, **kwargs)
-        if self.instance and self.instance.examined:
-            self.fields['full_name'].initial = (
-                self.instance.examined.full_name)
-            self.fields['position'].initial = self.instance.examined.position
-            self.fields['brigade'].initial = self.instance.examined.brigade
-            self.fields['previous_safety_group'].initial = (
-                self.instance.examined.previous_safety_group)
-            self.fields['safety_group'].initial = (
-                self.instance.examined.safety_group)
-            self.fields['work_experience'].initial = (
-                self.instance.examined.work_experience)
+        if (self.instance and hasattr(self.instance, 'examined') and
+                self.instance.examined):
+            self.initial.update({
+                'full_name': self.instance.examined.full_name,
+                'position': self.instance.examined.position,
+                'brigade': self.instance.examined.brigade,
+                'previous_safety_group':
+                    self.instance.examined.previous_safety_group,
+                'safety_group': self.instance.examined.safety_group,
+                'work_experience': self.instance.examined.work_experience,
+            })
 
-        if self.instance and self.instance.commission:
-            self.fields['chairman_name'].initial = (
-                self.instance.commission.chairman_name)
-            self.fields['chairman_position'].initial = (
-                self.instance.commission.chairman_position)
-            self.fields['member1_name'].initial = (
-                self.instance.commission.member1_name)
-            self.fields['member1_position'].initial = (
-                self.instance.commission.member1_position)
-            self.fields['member2_name'].initial = (
-                self.instance.commission.member2_name)
-            self.fields['member2_position'].initial = (
-                self.instance.commission.member2_position)
-            self.fields['safety_officer_name'].initial = (
-                self.instance.commission.safety_officer_name)
-            self.fields['safety_officer_position'].initial = (
-                self.instance.commission.safety_officer_position)
+        if (self.instance and hasattr(self.instance, 'commission') and
+                self.instance.commission):
+            self.initial.update({
+                'chairman_name': self.instance.commission.chairman_name,
+                'chairman_position':
+                    self.instance.commission.chairman_position,
+                'member1_name': self.instance.commission.member1_name,
+                'member1_position': self.instance.commission.member1_position,
+                'member2_name': self.instance.commission.member2_name,
+                'member2_position': self.instance.commission.member2_position,
+                'safety_officer_name':
+                    self.instance.commission.safety_officer_name,
+                'safety_officer_position':
+                    self.instance.commission.safety_officer_position,
+            })
 
     def clean(self):
         """
@@ -295,14 +292,14 @@ class ExaminationUpdateForm(forms.ModelForm):
 
         if previous_check_date and not previous_safety_group:
             self.add_error('previous_safety_group',
-                           'Предыдущая группа электробезопасности обязательна'
-                           'при указании даты предыдущей проверки.')
+                           "Предыдущая группа электробезопасности обязательна"
+                           "при указании даты предыдущей проверки.")
 
         if previous_safety_group and not previous_check_date:
             self.add_error('previous_check_date',
-                           'Дата проведения предыдущей проверки обязательна'
-                           'при указании предыдущей группы'
-                           'электробезопасности.')
+                           "Дата проведения предыдущей проверки обязательна"
+                           "при указании предыдущей группы"
+                           "электробезопасности.")
 
     def save(self, commit=True):
         """
