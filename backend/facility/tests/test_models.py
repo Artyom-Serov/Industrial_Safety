@@ -10,14 +10,14 @@ class CommissionModelTest(TestCase):
     # тесты модели Commission
     def setUp(self):
         self.commission = Commission.objects.create(
-            chairman_name='Иван Иванов',
-            chairman_position='Директор',
-            member1_name='Пётр Петров',
-            member1_position='Главный инженер',
-            member2_name='Николай Сидоров',
-            member2_position='Техник',
-            safety_officer_name='Анна Алексеева',
-            safety_officer_position='Электрик'
+            chairman_name="Иван Иванов",
+            chairman_position="Директор",
+            member1_name="Пётр Петров",
+            member1_position="Главный инженер",
+            member2_name="Николай Сидоров",
+            member2_position="Техник",
+            safety_officer_name="Анна Алексеева",
+            safety_officer_position="Электрик"
         )
 
     def test_organization_saved_to_db(self):
@@ -27,7 +27,7 @@ class CommissionModelTest(TestCase):
 
     def test_commission_str(self):
         # тестирование строкового представления Commission
-        self.assertEqual(str(self.commission), 'Комиссия: Иван Иванов')
+        self.assertEqual(str(self.commission), "Комиссия: Иван Иванов")
 
 
 class ExaminedModelTest(TestCase):
@@ -43,11 +43,11 @@ class ExaminedModelTest(TestCase):
             organization=self.organization
         )
         self.examined = Examined.objects.create(
-            full_name='Антонио Фагундес',
-            position='инженер',
-            brigade='Цех №1',
+            full_name="Антонио Фагундес",
+            position="инженер",
+            brigade="Цех №1",
             safety_group='III',
-            work_experience='5 лет',
+            work_experience="5 лет",
             user=self.user
         )
 
@@ -59,24 +59,24 @@ class ExaminedModelTest(TestCase):
         # тестирование присвоения компании пользователя при создании
         # нового аттестуемого
         new_examined = Examined.objects.create(
-            full_name='Флавио Кортес',
-            position='Мастер',
-            brigade='Цех №3',
+            full_name="Флавио Кортес",
+            position="Мастер",
+            brigade="Цех №3",
             safety_group='II',
-            work_experience='7 лет',
+            work_experience="7 лет",
             user=self.user
         )
         self.assertEqual(new_examined.company_name, self.organization)
 
     def test_examined_str(self):
         # тестирование строкового представления Examined
-        self.assertEqual(str(self.examined), 'Антонио Фагундес')
+        self.assertEqual(str(self.examined), "Антонио Фагундес")
 
 
 class BriefingModelTest(TestCase):
     # тесты модели Briefing
     def setUp(self):
-        self.briefing = Briefing.objects.create(name='Первичный')
+        self.briefing = Briefing.objects.create(name="Первичный")
 
     def test_briefing_saved_to_db(self):
         # тестирование сохранения созданного инструктажа в базе данных
@@ -90,14 +90,14 @@ class BriefingModelTest(TestCase):
 
     def test_briefing_str(self):
         # тестирование строкового представления Briefing
-        self.assertEqual(str(self.briefing), 'Первичный')
+        self.assertEqual(str(self.briefing), "Первичный")
 
 
 class CourseModelTest(TestCase):
     # тесты модели Course
     def setUp(self):
         self.course = Course.objects.create(
-            course_number='001', course_name='Машинист крана автомобильного'
+            course_number='001', course_name="Машинист крана автомобильного"
         )
 
     def test_course_saved_to_db(self):
@@ -117,21 +117,21 @@ class CourseModelTest(TestCase):
 
     def test_course_str(self):
         # тестирование строкового представления Course
-        self.assertEqual(str(self.course), 'Машинист крана автомобильного')
+        self.assertEqual(str(self.course), "Машинист крана автомобильного")
 
 
 class ExaminationModelTest(TestCase):
     # тесты модели Examination
     def setUp(self):
         self.commission = Commission.objects.create(
-            chairman_name='Иван Иванов',
-            chairman_position='Директор',
-            member1_name='Пётр Петров',
-            member1_position='Главный инженер',
-            member2_name='Николай Сидоров',
-            member2_position='Техник',
-            safety_officer_name='Анна Алексеева',
-            safety_officer_position='Электрик'
+            chairman_name="Иван Иванов",
+            chairman_position="Директор",
+            member1_name="Пётр Петров",
+            member1_position="Главный инженер",
+            member2_name="Николай Сидоров",
+            member2_position="Техник",
+            safety_officer_name="Анна Алексеева",
+            safety_officer_position="Электрик"
         )
         self.organization = Organization.objects.create(
             name='Test organization'
@@ -143,22 +143,22 @@ class ExaminationModelTest(TestCase):
             organization=self.organization
         )
         self.examined = Examined.objects.create(
-            full_name='Антонио Фагундес',
-            position='инженер',
-            brigade='Цех №1',
+            full_name="Антонио Фагундес",
+            position="инженер",
+            brigade="Цех №1",
             safety_group='III',
-            work_experience='5 лет',
+            work_experience="5 лет",
             user=self.user
         )
-        self.briefing = Briefing.objects.create(name='Первичный')
+        self.briefing = Briefing.objects.create(name="Первичный")
         self.course = Course.objects.create(
-            course_number='001', course_name='Машинист крана автомобильного'
+            course_number='001', course_name="Машинист крана автомобильного"
         )
         self.examination = Examination.objects.create(
             current_check_date=date(2024, 1,15),
             next_check_date=date(2025, 1,15),
             protocol_number='123/2024',
-            reason='Повторная',
+            reason="Повторная",
             commission=self.commission,
             examined=self.examined,
             briefing=self.briefing,
@@ -172,4 +172,4 @@ class ExaminationModelTest(TestCase):
 
     def test_examination_str(self):
         # тестирование строкового представления Examination
-        self.assertEqual(str(self.examination), 'Проверка 123/2024')
+        self.assertEqual(str(self.examination), "Проверка 123/2024")
