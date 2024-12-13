@@ -119,7 +119,7 @@ def create_examination(request):
         form = ExaminationCreateForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
-            cache.delete_pattern('examinations_*')
+            cache.delete('examinations_*')
             return redirect('facility:index')
     else:
         form = ExaminationCreateForm(user=request.user)
@@ -148,7 +148,7 @@ def update_examination(request, pk):
         form = ExaminationUpdateForm(request.POST, instance=examination)
         if form.is_valid():
             form.save()
-            cache.delete_pattern('examinations_*')
+            cache.delete('examinations_*')
             return redirect('facility:index')
     else:
         form = ExaminationUpdateForm(instance=examination)
@@ -176,6 +176,6 @@ def delete_examination(request, pk):
     template = 'facility/examination_confirm_delete.html'
     if request.method == 'POST':
         examination.delete()
-        cache.delete_pattern('examinations_*')
+        cache.delete('examinations_*')
         return redirect('facility:index')
     return render(request, template, {'examination': examination})

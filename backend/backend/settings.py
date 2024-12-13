@@ -2,9 +2,8 @@
 Django settings for backend project.
 """
 
-import os
-
 from pathlib import Path
+
 import environ
 
 env = environ.Env()
@@ -135,5 +134,11 @@ CACHE = {
         }
     }
 }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#     }
+# }
 
 CACHE_TTL = env("CACHE_TIME", default=300)
