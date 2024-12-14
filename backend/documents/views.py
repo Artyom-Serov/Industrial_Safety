@@ -66,7 +66,7 @@ def document_generate_view(request, examination_id):
             response = HttpResponse(
                 document_content,
                 content_type='application/vnd.openxmlformats-'
-                                 'officedocument.wordprocessingml.document'
+                             'officedocument.wordprocessingml.document'
             )
             response['Content-Disposition'] = (f'attachment; filename="'
                                                f'{output_name}"')
