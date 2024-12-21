@@ -3,6 +3,13 @@
 <h2 align="center">Авторизация пользователя</h2>
 <div class="container">
   <div class="item">
+    {% if messages %}
+      <ul class="error-messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
     <form method="POST">
       {% csrf_token %}
       <label for="username">Имя пользователя:</label>
