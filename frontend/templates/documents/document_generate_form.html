@@ -5,6 +5,7 @@
 <div class="container">
     <div class="item">
     <p>Протокол проверки: №{{ examination.protocol_number }} </p>
+    <p>Аттестуемый: {{ examination.examined.full_name }} </p>
       <form method="POST" class="mt-4">
         {% csrf_token %}
         <div class="form-group">
