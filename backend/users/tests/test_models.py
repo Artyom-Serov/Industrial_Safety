@@ -3,32 +3,30 @@ from users.models import Organization, User
 
 
 class OrganizationModelTest(TestCase):
-    # тестирование модели организаций
+    """Тесты модели организаций."""
     def setUp(self):
-        # создание тестовой организации
         self.organization = Organization.objects.create(
             name='Test organization'
         )
 
     def test_organization_name_max_length(self):
-        # проверка длины поля
+        """Тестирование длины поля."""
         max_length = self.organization._meta.get_field('name').max_length
         self.assertEqual(max_length, 255)
 
     def test_organization_saved_to_db(self):
-        # проверка сохранения созданной организации в базе данных
+        """Тестирование сохранения созданной организации в базе данных."""
         self.assertEqual(Organization.objects.count(), 1)
         self.assertEqual(Organization.objects.first(), self.organization)
 
     def test_organization_str(self):
-        # проверка строкового представления
+        """Тестирование строкового представления."""
         self.assertEqual(str(self.organization), 'Test organization')
 
 
 class UserModelTest(TestCase):
-    # тестирование модели пользователя
+    """Тесты модели пользователя."""
     def setUp(self):
-        # создание тестового пользователя и организации
         self.organization = Organization.objects.create(
             name='User organization'
         )
@@ -40,16 +38,16 @@ class UserModelTest(TestCase):
         )
 
     def test_user_saved_to_db(self):
-        # проверка сохранения пользователя в базе
+        """Тестирование сохранения пользователя в базе."""
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(User.objects.first(), self.user)
 
     def test_user_str(self):
-        # проверка строкового представления
+        """Тестирование строкового представления."""
         self.assertEqual(str(self.user), 'testuser')
 
     def test_user_email_unique(self):
-        # проверка уникальности эл.почты
+        """Тестирование уникальности электронной почты."""
         with self.assertRaises(Exception):
             User.objects.create_user(
                 username='testuser2',
@@ -58,9 +56,9 @@ class UserModelTest(TestCase):
             )
 
     def test_user_default_ordering(self):
-        # проверка сортировки по умолчанию
+        """Тестирование сортировки по умолчанию."""
         self.assertEqual(list(User.objects.all().order_by('id')), [self.user])
 
     def test_user_organization(self):
-        # проверка связи пользователя с организацией
+        """Тестирование связи пользователя с организацией."""
         self.assertEqual(self.user.organization, self.organization)
