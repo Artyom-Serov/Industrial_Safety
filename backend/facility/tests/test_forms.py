@@ -6,7 +6,7 @@ from datetime import date
 
 
 class ExaminationCreateFormTest(TestCase):
-    # тесты для формы создания записи о проверке
+    """Тесты для формы создания записи о проверке."""
     def setUp(self):
         self.organization = Organization.objects.create(
             name='Test organization'
@@ -47,13 +47,17 @@ class ExaminationCreateFormTest(TestCase):
         }
 
     def test_form_valid_data(self):
-        # тестирование валидности формы при корректных данных
+        """
+        Тестирование валидности формы при корректных данных.
+        """
         form = ExaminationCreateForm(data=self.valid_data, user=self.user)
         self.assertTrue(form.is_valid())
 
     def test_invalid_without_previous_group(self):
-        # тестирование не валидности формы без предыдущей группы
-        # электробезопасности, при указании даты предыдущей проверки
+        """
+        Тестирование не валидности формы без предыдущей группы
+        электробезопасности, при указании даты предыдущей проверки.
+        """
         data = self.valid_data.copy()
         data['previous_safety_group'] = ''
         form = ExaminationCreateForm(data=data, user=self.user)
@@ -61,8 +65,10 @@ class ExaminationCreateFormTest(TestCase):
         self.assertIn('previous_safety_group', form.errors)
 
     def test_save_create_related_objects(self):
-        # тестирование метода 'save', который должен создавать связанные
-        # объекты Examined и Commission
+        """
+        Тестирование метода 'save', который должен создавать связанные объекты
+        Examined и Commission.
+        """
         form = ExaminationCreateForm(data=self.valid_data, user=self.user)
         if form.is_valid():
             examination = form.save()
@@ -74,7 +80,7 @@ class ExaminationCreateFormTest(TestCase):
 
 
 class ExaminationUpdateFormTest(TestCase):
-    # тесты для формы обновления записи о проверке
+    """Тесты для формы обновления записи о проверке."""
     def setUp(self):
         self.organization = Organization.objects.create(
             name='Test organization'
@@ -120,13 +126,17 @@ class ExaminationUpdateFormTest(TestCase):
         )
 
     def test_form_loads_initial_data(self):
-        # тестирование загрузки в форму начальных данных из связной записи
+        """
+        Тестирование загрузки в форму начальных данных из связной записи.
+        """
         form = ExaminationUpdateForm(instance=self.examination)
         self.assertEqual(form.initial['full_name'], "Иван Иванов")
         self.assertEqual(form.initial['chairman_name'], "Пётр Петров")
 
     def test_form_updates_data(self):
-        #
+        """
+        Тестирование обновления данных связанных объектов.
+        """
         data = {
             'previous_check_date': date(2023, 1, 15),
             'current_check_date': date(2024, 2, 15),
