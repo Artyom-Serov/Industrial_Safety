@@ -1,5 +1,3 @@
-from http.client import responses
-
 import pytest
 from django.urls import reverse
 from users.models import User, Organization
