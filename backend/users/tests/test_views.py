@@ -24,7 +24,7 @@ def admin_user(organization):
 @pytest.fixture
 def regular_user(organization):
     """Фикстура обычного пользователя, связанного с тестовой организацией."""
-    user = User.objects.create_superuser(
+    user = User.objects.create_user(
         username='testuser', email='testuser@example.com', password='password123',
         organization=organization
     )
