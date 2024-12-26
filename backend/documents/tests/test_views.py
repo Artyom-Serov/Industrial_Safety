@@ -154,5 +154,7 @@ mock_cache_set, mock_cache_get, mock_open, setup_examination, url, rf
         part.decode(charset or 'utf-8') if isinstance(part, bytes) else part
         for part, charset in decoded_header
     )
-    expected_filename = f'attachment; filename="протокол_проверки_по_ОТ_1.docx"'
+    expected_filename = (f'attachment; filename='
+                         f'"протокол_проверки_по_ОТ_'
+                         f'{setup_examination.id}.docx"')
     assert expected_filename in decoded_filename
