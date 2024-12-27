@@ -3,14 +3,16 @@
 {% if user.is_superuser %}
   <h2 align="center">Список всех пользователей</h2>
     <div class="container">
-    {% for usr in users %}
+    {% for user in users %}
       <div class="item">
-        <p>Наименование организации: {{ usr.organization.name }}</p>
-        <p>Имя пользователя: {{ usr.username }}</p>
-        <p>Фамилия: {{ usr.last_name }}</p>
-        <p>Имя: {{ usr.first_name }}</p>
-        <p>Адрес электронной почты: {{ usr.email }}</p>
-        <a href="{% url 'users:edit_user_profile' usr.id %}">Редактировать</a>
+        <p>Наименование организации: {{ user.organization.name }}</p>
+        <p>Имя пользователя: {{ user.username }}</p>
+        <p>Фамилия: {{ user.last_name }}</p>
+        <p>Имя: {{ user.first_name }}</p>
+        <p>Адрес электронной почты: {{ user.email }}</p>
+        <button type="button">
+          <a href="{% url 'users:edit_user_profile' user.id %}">Редактировать</a>
+        </button>
       </div>
     {% endfor %}
     </div>

@@ -31,7 +31,7 @@ main {
     /*font-family: 'GOST_Font', sans-serif; */
     flex: 1;
     padding: 30px;
-    width: 98%;
+    width: 95%;
     /* max-width: 1200px; */
     margin: 0 auto;
 }
@@ -69,7 +69,7 @@ footer {
 }
 
 table {
-    width: 100%; /* Устанавливает ширину таблицы на 100% от контейнера */
+    width: 95%; /* Устанавливает ширину таблицы на 100% от контейнера */
     border-collapse: collapse; /* Объединяет границы таблицы и ячеек в одну линию */
     table-layout: fixed; /* Устанавливает фиксированную ширину столбцов, сжимает таблицу */
 }
@@ -94,3 +94,165 @@ td {
     color: red;
     font-weight: bold;
 }
+
+/* Стили для кнопок */
+button {
+    font-size: 15px; /* Увеличенный размер текста */
+    padding: 5px 10px; /* Пространство внутри кнопки */
+    /* border: 2px solid #007BFF; Цвет рамки */
+    border: 2px solid #2F4F4F; /* Цвет рамки */
+    border-radius: 10px; /* Скругление углов */
+    /* background-color: #007BFF; Фоновый цвет */
+    background-color: #008B8B; /* Фоновый цвет */
+    color: white; /* Цвет текста */
+    cursor: pointer; /* Указатель мыши при наведении */
+    display: inline-block; /* Обеспечивает корректное отображение */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); /* Рельефная тень */
+    transition: background-color 0.3s, transform 0.2s; /* Плавный переход эффектов */
+}
+button:active {
+    /* background-color: #0056b3; Темный оттенок при нажатии */
+    background-color: #00CED1; /* Темный оттенок при нажатии */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшение тени для эффекта нажатия */
+    transform: scale(0.90); /* Легкое уменьшение размера кнопки */
+}
+button:hover {
+    /* background-color: #0056b3; Цвет при наведении */
+    background-color: #00CED1; /* Цвет при наведении */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1); /* Более сильная тень */
+}
+button:focus {
+    outline: none; /* Убирает стандартную рамку при фокусе */
+}
+button a {
+    position: relative;
+    padding: 0; /* Убираем внутренние отступы кнопки */
+    text-decoration: none; /* Убирает подчеркивание у ссылки */
+    color: white; /* Цвет текста ссылки */
+    font-size: inherit; /* Унаследовать размер шрифта от кнопки */
+}
+button a:hover {
+    text-decoration: none; /* Убирает подчеркивание при наведении */
+    color: #2F4F4F; /* Сохраняет цвет текста */
+}
+
+
+/* Стили для выпадающего списка (select) */
+form select {
+    font-size: 15px; /* Увеличенный размер текста */
+    padding: 8px; /* Отступы внутри поля */
+    border: 2px solid #40E0D0; /* Цвет рамки */
+    border-radius: 5px; /* Скругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+    color: #333; /* Цвет текста */
+    outline: none; /* Убираем стандартное выделение */
+    cursor: pointer; /* Курсор при наведении */
+    transition: all 0.3s ease; /* Плавный переход */
+}
+/* Эффекты при наведении */
+form select:hover {
+    border-color: #20B2AA; /* Изменение цвета рамки */
+    background-color: #e9ecef; /* Легкое затемнение фона */
+}
+/* Эффекты при фокусе */
+form select:focus {
+    border-color: #008B8B; /* Цвет рамки */
+    background-color: #ffffff; /* Белый фон */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Подсветка рамки */
+}
+/* Стили для отдельных вариантов (option) */
+form select option {
+    font-size: 15px; /* Размер текста */
+    padding: 5px; /* Внутренние отступы */
+    color: #333; /* Цвет текста */
+    background-color: #fff; /* Цвет фона */
+}
+
+/* Общие стили для полей ввода */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form input[type="url"],
+form textarea {
+    font-size: 15px; /* Увеличенный размер текста */
+    padding: 8px; /* Внутренние отступы */
+    border: 2px solid #40E0D0; /* Цвет рамки */
+    border-radius: 5px; /* Скругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+    color: #333; /* Цвет текста */
+    outline: none; /* Убираем стандартное выделение */
+    transition: all 0.3s ease; /* Плавный переход */
+    width: 100%; /* Полная ширина */
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+}
+/* Эффекты при наведении */
+form input[type="text"]:hover,
+form input[type="email"]:hover,
+form input[type="password"]:hover,
+form input[type="number"]:hover,
+form input[type="url"]:hover,
+form textarea:hover {
+    border-color: #20B2AA; /* Изменение цвета рамки */
+    background-color: #e9ecef; /* Легкое затемнение фона */
+}
+/* Эффекты при фокусе */
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form input[type="number"]:focus,
+form input[type="url"]:focus,
+form textarea:focus {
+    border-color: #008B8B; /* Цвет рамки */
+    background-color: #ffffff; /* Белый фон */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Подсветка рамки */
+}
+form input:invalid {
+    border-color: #FF6347; /* Красный цвет рамки для ошибки */
+    background-color: #FFE4E1; /* Светло-красный фон */
+}
+
+/* Стили для полей даты */
+form input[type="date"] {
+    font-size: 15px; /* Размер текста */
+    padding: 7px; /* Внутренние отступы */
+    border: 2px solid #40E0D0; /* Цвет рамки */
+    border-radius: 5px; /* Скругленные углы */
+    background-color: #f8f9fa; /* Светлый фон */
+    color: #333; /* Цвет текста */
+    outline: none; /* Убираем стандартное выделение */
+    cursor: pointer; /* Указатель курсора */
+    transition: all 0.3s ease; /* Плавный переход */
+    width: 100%; /* Полная ширина */
+    box-sizing: border-box; /* Учитываем отступы */
+}
+/* Эффекты при наведении */
+form input[type="date"]:hover {
+    border-color: #20B2AA; /* Цвет рамки */
+    background-color: #e9ecef; /* Легкое затемнение фона */
+}
+/* Эффекты при фокусе */
+form input[type="date"]:focus {
+    border-color: #008B8B; /* Цвет рамки */
+    background-color: #ffffff; /* Белый фон */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Подсветка рамки */
+}
+/* Стили для стрелок календаря (если есть) */
+form input[type="date"]::-webkit-calendar-picker-indicator {
+    color: #333; /* Цвет стрелки */
+    background: transparent; /* Прозрачный фон */
+    cursor: pointer; /* Указатель курсора */
+}
+/* Убираем стандартный фон стрелок на Firefox */
+form input[type="date"]::-moz-focus-inner {
+    border: 0;
+}
+
+/* Стили для текста подсказки */
+.form-text.text-muted {
+    font-size: 13px; /* Размер текста */
+    color: #6c757d; /* Серый цвет */
+    margin-top: 4px; /* Отступ сверху */
+    margin-left: 2px; /* Легкий отступ слева */
+}
+

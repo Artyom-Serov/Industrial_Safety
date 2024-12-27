@@ -2,18 +2,29 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<h2 align="center">Проверки вашей организации</h2>
+{% if user.is_superuser %}
+  <h3 align="center">Приветствую, {{ user.username }}!</h3>
+{% else %}
+  <h3 align="center">Приветствую, {{ user.first_name }}!</h3>
+{% endif %}
+<h3 align="center">Проверки вашей организации</h3>
 <div class="container">
   <button type="button">
     <a href="{% url 'facility:create_examination' %}"
        class="btn btn-primary">Добавить запись
     </a>
   </button>
-
   <div class="item">
     <form method="get" class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="date" name="current_check_date" placeholder="Дата текущей проверки" value="{{ request.GET.current_check_date }}">
-      <input class="form-control mr-sm-2" type="date" name="next_check_date" placeholder="Дата следующей проверки" value="{{ request.GET.next_check_date }}">
+      <p>Варианты фильтрации записей о проверках:</p>
+      <div class="form-group">
+        <input class="form-control mr-sm-2" type="date" name="current_check_date" value="{{ request.GET.current_check_date }}">
+        <small class="form-text text-muted">Введите дату текущей проверки (можно выбрать в календаре)</small>
+      </div>
+      <div class="form-group">
+        <input class="form-control mr-sm-2" type="date" name="next_check_date" value="{{ request.GET.next_check_date }}">
+        <small class="form-text text-muted">Введите дату следующей проверки (можно выбрать в календаре)</small>
+      </div>
       <input class="form-control mr-sm-2" type="text" name="course_number" placeholder="№ программы обучения" value="{{ request.GET.course_number }}">
       <input class="form-control mr-sm-2" type="text" name="course_name" placeholder="Наименование программы обучения" value="{{ request.GET.course_name }}">
       <input class="form-control mr-sm-2" type="text" name="brigade" placeholder="Цех, участок аттестуемого" value="{{ request.GET.brigade }}">
@@ -119,10 +130,10 @@
   </div>
   {% else %}
   <div class="item" align="center">
-    <p>Приветствую Вас в приложении для контроля за проверками
-        в области охраны труда и промышленной безопасности.</p>
-    <p>Ознакомление с функционалом приложения доступно только зарегистрированным пользователям.</p>
-    <p>Для регистрации обратитесь к администратору.</p>
+    <h4>Приветствую Вас в приложении для контроля за проверками
+        в области охраны труда и промышленной безопасности.</h4>
+    <h4>Ознакомление с функционалом приложения доступно только зарегистрированным пользователям.</h4>
+    <h4>Для регистрации обратитесь к администратору.</h4>
   </div>
 </div>
 {% endif %}
