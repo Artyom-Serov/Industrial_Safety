@@ -1,18 +1,18 @@
 services:
   db:
     image: postgres:13.10
-    container_name: lp_db
+    container_name: is_db
     restart: always
     env_file:
       - .env
     volumes:
-      - lp_data:/var/lib/postgresql/data
+      - is_data:/var/lib/postgresql/data
     networks:
       - backend_network
 
   redis:
     image: redis:6.2
-    container_name: lp_redis
+    container_name: is_redis
     restart: unless-stopped
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
@@ -23,7 +23,7 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: lp_backend
+    container_name: is_backend
     restart: on-failure
     command: >
       sh -c "sleep 5 && \
@@ -44,7 +44,7 @@ services:
   frontend:
     build:
       context: ./frontend
-    container_name: lp_frontend
+    container_name: is_frontend
     command: >
       sh -c "cp -r /frontend/static/. /frontend_static/"
     volumes:
@@ -58,7 +58,7 @@ services:
   nginx:
     build:
       context: ./web
-    container_name: lp_nginx
+    container_name: is_nginx
     restart: unless-stopped
     volumes:
       - static:/staticfiles
@@ -71,7 +71,7 @@ services:
       - backend_network
 
 volumes:
-  lp_data:
+  is_data:
   static:
   templates:
 
