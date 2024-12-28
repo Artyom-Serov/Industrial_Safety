@@ -13,6 +13,15 @@ jobs:
         image: redis:latest
         ports:
           - 6379:6379
+      postgres:
+        image: postgres:13.10
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -28,4 +37,10 @@ jobs:
           pip install -r backend/requirements.txt
 
       - name: Test with pytest
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
         run: pytest backend/
