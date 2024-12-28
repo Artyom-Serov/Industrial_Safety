@@ -27,8 +27,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
 
-      - name: Start Redis
-        run: sudo service redis-server start
-
       - name: Test with pytest
         run: pytest backend/
