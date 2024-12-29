@@ -43,4 +43,6 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           DB_HOST: 127.0.0.1
           DB_PORT: 5432
-        run: pytest backend/
+        run: |
+          flake8 --count .
+          pytest backend/
