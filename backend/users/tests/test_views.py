@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from users.models import User, Organization
+from users.models import Organization, User
 
 
 @pytest.fixture
@@ -23,7 +23,9 @@ def admin_user(organization):
 def regular_user(organization):
     """Фикстура обычного пользователя, связанного с тестовой организацией."""
     user = User.objects.create_user(
-        username='testuser', email='testuser@example.com', password='password123',
+        username='testuser',
+        email='testuser@example.com',
+        password='password123',
         organization=organization
     )
     return user
@@ -41,7 +43,6 @@ def client_with_logged_in_user(client, regular_user):
     """Фикстура аутентификации обычного пользователя в клиенте тестирования."""
     client.login(username=regular_user.username, password='password123')
     return client
-
 
 
 @pytest.mark.django_db
@@ -111,9 +112,8 @@ def test_admin_edit_user_profile(client_with_logged_in_admin, regular_user):
 
 
 @pytest.mark.django_db
-def test_user_register_with_existing_organization(
-client_with_logged_in_admin, organization
-):
+def test_user_register_with_existing_organization(client_with_logged_in_admin,
+                                                  organization):
     """Тест регистрации нового пользователя с существующей организацией."""
     url = reverse('users:register')
     data = {

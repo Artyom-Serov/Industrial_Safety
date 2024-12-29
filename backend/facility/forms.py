@@ -3,8 +3,9 @@
 """
 
 from django import forms
-from .models import Examination, Examined, Commission
-from users.models import User, Organization
+from users.models import Organization, User
+
+from .models import Commission, Examination, Examined
 
 
 class ExaminationCreateForm(forms.ModelForm):
@@ -253,8 +254,9 @@ class ExaminationUpdateForm(forms.ModelForm):
         связаны с текущей записью.
         """
         super().__init__(*args, **kwargs)
-        if (self.instance and hasattr(self.instance, 'examined') and
-                self.instance.examined):
+        if (self.instance and hasattr(
+                self.instance, 'examined'
+        ) and self.instance.examined):
             self.initial.update({
                 'full_name': self.instance.examined.full_name,
                 'position': self.instance.examined.position,
@@ -265,8 +267,9 @@ class ExaminationUpdateForm(forms.ModelForm):
                 'work_experience': self.instance.examined.work_experience,
             })
 
-        if (self.instance and hasattr(self.instance, 'commission') and
-                self.instance.commission):
+        if (self.instance and hasattr(
+                self.instance, 'commission'
+        ) and self.instance.commission):
             self.initial.update({
                 'chairman_name': self.instance.commission.chairman_name,
                 'chairman_position':

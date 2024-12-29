@@ -2,14 +2,15 @@
 Модуль представлений, управляющих пользователями и организациями.
 """
 
-from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.cache import cache
+from django.shortcuts import get_object_or_404, redirect, render
+
 from .forms import CustomUserCreationForm, CustomUserEditForm
-from .models import User, Organization
+from .models import Organization, User
 
 
 def user_login(request):
@@ -55,7 +56,8 @@ def user_login(request):
 @login_required
 def user_profile(request):
     """
-    Отображает профиль текущего пользователя. Если пользователь — администратор,
+    Отображает профиль текущего пользователя.
+    Если пользователь — администратор,
     также отображает список всех пользователей.
 
     Параметры:
@@ -81,7 +83,8 @@ def user_profile(request):
 def edit_profile(request):
     """
     Обрабатывает редактирование профиля текущего пользователя. При успешной
-    валидации формы сохраняет изменения и перенаправляет на профиль пользователя.
+    валидации формы сохраняет изменения и перенаправляет
+    на профиль пользователя.
 
     Параметры:
         request (HttpRequest): Объект запроса.

@@ -2,13 +2,14 @@
 Модуль представлений, управляющих проверками, аттестуемыми и комиссиями.
 """
 
-from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView
-from .models import Examination
+
 from .forms import ExaminationCreateForm, ExaminationUpdateForm
+from .models import Examination
 
 
 class IndexView(ListView):

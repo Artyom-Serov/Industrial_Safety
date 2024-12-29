@@ -1,8 +1,9 @@
+from datetime import date
+
 from django.test import TestCase
 from facility.forms import ExaminationCreateForm, ExaminationUpdateForm
 from facility.models import Briefing, Commission, Course, Examination, Examined
 from users.models import Organization, User
-from datetime import date
 
 
 class ExaminationCreateFormTest(TestCase):
@@ -75,8 +76,12 @@ class ExaminationCreateFormTest(TestCase):
             self.assertEqual(Examination.objects.count(), 1)
             self.assertEqual(Examined.objects.count(), 1)
             self.assertEqual(Commission.objects.count(), 1)
-            self.assertEqual(examination.examined.full_name, "Антонио Фагундес")
-            self.assertEqual(examination.commission.chairman_name, "Иван Иванов")
+            self.assertEqual(
+                examination.examined.full_name, "Антонио Фагундес"
+            )
+            self.assertEqual(
+                examination.commission.chairman_name, "Иван Иванов"
+            )
 
 
 class ExaminationUpdateFormTest(TestCase):

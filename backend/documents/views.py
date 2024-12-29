@@ -7,9 +7,10 @@ from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.shortcuts import render
-from .forms import DocumentGenerationForm
-from .document_generation import generate_document
 from facility.models import Examination
+
+from .document_generation import generate_document
+from .forms import DocumentGenerationForm
 
 
 def document_generate_view(request, examination_id):

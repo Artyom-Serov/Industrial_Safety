@@ -11,7 +11,8 @@ Briefing, Course и Examination в интерфейсе Django Admin.
         Examination в Django Admin.
 """
 from django.contrib import admin
-from .models import Commission, Examined, Briefing, Course, Examination
+
+from .models import Briefing, Commission, Course, Examination, Examined
 
 
 class ExaminedAdmin(admin.ModelAdmin):

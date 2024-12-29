@@ -1,25 +1,20 @@
 import os
 import shutil
 from email.header import decode_header
-from http.client import responses
-from unittest.mock import patch, mock_open
-from wsgiref.util import request_uri
+from unittest.mock import mock_open, patch
 
 import pytest
 from django.conf import settings
 from django.urls import reverse
-from documents.views import document_generate_view
 from documents.forms import DocumentGenerationForm
-from facility.models import (
-Briefing, Commission, Course, Examined, Examination
-)
-from users.models import Organization, User
+from documents.views import document_generate_view
+from facility.models import Briefing, Commission, Course, Examination, Examined
+from users.models import User
 
 
 @pytest.fixture
 def setup_examination():
     """Фикстура создания необходимых объектов проверки."""
-    organization = Organization.objects.create(name='Test organization')
     user = User.objects.create_user(
         username='testuser', password='password123'
     )
@@ -74,7 +69,9 @@ def test_document_generation(generate_mock, setup_examination, url, rf):
     request = rf.post(url, data)
 
     output_name = f"протокол_проверки_по_ОТ_{setup_examination.id}.docx"
-    output_path = os.path.join(settings.BASE_DIR, 'generated_documents', output_name)
+    output_path = os.path.join(
+        settings.BASE_DIR, 'generated_documents', output_name
+    )
     generated_dir = os.path.dirname(output_path)
 
     os.makedirs(generated_dir, exist_ok=True)
@@ -85,7 +82,8 @@ def test_document_generation(generate_mock, setup_examination, url, rf):
 
     generate_mock.assert_called_once_with(
         setup_examination.id,
-        f"{settings.BASE_DIR}/documents/templates/протокол_проверки_по_ОТ.docx",
+        f"{settings.BASE_DIR}/documents/templates/"
+        f"протокол_проверки_по_ОТ.docx",
         output_path,
     )
     assert response.status_code == 200
@@ -116,9 +114,8 @@ def test_invalid_form_submission(setup_examination, url, rf):
 @pytest.mark.django_db
 @patch('documents.views.cache.get')
 @patch('documents.views.cache.set')
-def test_cache_usage(
-mock_cache_set, mock_cache_get, setup_examination, url, rf
-):
+def test_cache_usage(mock_cache_set, mock_cache_get,
+                     setup_examination, url, rf):
     """Тестирование использования кэша."""
     mock_cache_get.return_value = setup_examination
     request = rf.get(url)
@@ -136,9 +133,8 @@ mock_cache_set, mock_cache_get, setup_examination, url, rf
        read_data=b'Test document content')
 @patch('documents.views.cache.get')
 @patch('documents.views.cache.set')
-def test_cached_document_response(
-mock_cache_set, mock_cache_get, mock_open, setup_examination, url, rf
-):
+def test_cached_document_response(mock_cache_set, mock_cache_get, mock_open,
+                                  setup_examination, url, rf):
     """Тест возврата кэшированного документа."""
     mock_cache_get.side_effect = [None, b'Test document content']
     data = {'template': "протокол_проверки_по_ОТ"}

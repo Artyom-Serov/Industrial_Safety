@@ -1,9 +1,8 @@
-from django.test import TestCase
-from facility.models import (
-Commission, Examined, Briefing, Course, Examination
-)
-from users.models import User, Organization
 from datetime import date
+
+from django.test import TestCase
+from facility.models import Briefing, Commission, Course, Examination, Examined
+from users.models import Organization, User
 
 
 class CommissionModelTest(TestCase):
@@ -179,8 +178,8 @@ class ExaminationModelTest(TestCase):
             course_number='001', course_name="Машинист крана автомобильного"
         )
         self.examination = Examination.objects.create(
-            current_check_date=date(2024, 1,15),
-            next_check_date=date(2025, 1,15),
+            current_check_date=date(2024, 1, 15),
+            next_check_date=date(2025, 1, 15),
             protocol_number='123/2024',
             reason="Повторная",
             commission=self.commission,

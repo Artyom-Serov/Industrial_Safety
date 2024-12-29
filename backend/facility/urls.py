@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import IndexView, create_examination, update_examination, delete_examination
+
+from .views import (IndexView, create_examination, delete_examination,
+                    update_examination)
 
 app_name = 'facility'
 

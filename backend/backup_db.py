@@ -4,6 +4,7 @@
 import os
 import subprocess
 from datetime import datetime
+
 import yaml
 from dotenv import load_dotenv
 
@@ -27,36 +28,38 @@ def execute_command(command):
 
 
 def get_container_name_from_compose(service_name, compose_file):
-    """Функция получения имя контейнера из файла docker-compose.yml."""
+    """Функция получения имени контейнера из файла docker-compose.yml."""
     with open(compose_file, 'r') as file:
         compose_data = yaml.safe_load(file)
 
     try:
-        container_name = compose_data['services'][service_name]['container_name']
+        container_name = compose_data['services'][service_name][
+            'container_name'
+        ]
         return container_name
     except KeyError:
-        print(f"Ошибка: Сервис 'service_name' или параметр 'container_name' "
-              f"не найден в 'compose_file'.")
+        print(f"Ошибка: Сервис '{service_name}' или параметр 'container_name' "
+              f"не найден в '{compose_file}'.")
         exit(1)
 
 
 def create_and_extract_dump(container_name, db_name, db_user, dump_file):
-    """Функция создания дампа базы данных в контейнере и извлечение его
+    """Функция создания дампа базы данных в контейнере и извлечения его
     в корень проекта."""
     # создание дампа базы данных внутри контейнера
     create_dump_cmd = (
-        f'sudo docker exec -it {container_name} '
-        f'bash -c \"pg_dump -U {db_user} -F c -d {db_name} -f /{dump_file}"'
+        f"sudo docker exec -it {container_name} "
+        f"bash -c \"pg_dump -U {db_user} -F c -d {db_name} -f /{dump_file}\""
     )
     execute_command(create_dump_cmd)
     # копирование дампа из контейнера в корень проекта
     extract_dump_cmd = (
-        f'sudo docker cp {container_name}:/{dump_file} '
-        f'{BASE_DIR}/{dump_file}'
+        f"sudo docker cp {container_name}:/{dump_file} "
+        f"{BASE_DIR}/{dump_file}"
     )
     execute_command(extract_dump_cmd)
     # удаление временного дампа в контейнере
-    clean_up_cmd = f'sudo docker exec -it {container_name} rm /{dump_file}'
+    clean_up_cmd = f"sudo docker exec -it {container_name} rm /{dump_file}"
     execute_command(clean_up_cmd)
 
     print(
@@ -65,7 +68,7 @@ def create_and_extract_dump(container_name, db_name, db_user, dump_file):
 
 
 if __name__ == '__main__':
-    COMPOSE_FILE = os.path.join(BASE_DIR,'docker-compose.yml')
+    COMPOSE_FILE = os.path.join(BASE_DIR, 'docker-compose.yml')
     SERVICE_NAME = 'db'
     CONTAINER_NAME = get_container_name_from_compose(SERVICE_NAME,
                                                      COMPOSE_FILE)
@@ -74,8 +77,8 @@ if __name__ == '__main__':
     # проверка наличия обязательных параметров
     if not all([CONTAINER_NAME, DB_NAME, DB_USER]):
         print(
-            "Ошибка: Убедитесь, что DB_NAME b DB_USER указаны в файле '.env',"
-            " а CONTAINER_NAME извлечён из 'docker-compose.yml'."
+            "Ошибка: Убедитесь, что DB_NAME и DB_USER указаны в файле '.env', "
+            "а CONTAINER_NAME извлечён из 'docker-compose.yml'."
         )
         exit(1)
     # генерация имени файла дампа

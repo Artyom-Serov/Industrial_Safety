@@ -4,7 +4,8 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Organization
+
+from .models import Organization, User
 
 
 class CustomUserCreationForm(UserCreationForm):

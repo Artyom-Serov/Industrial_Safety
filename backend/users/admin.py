@@ -4,8 +4,9 @@
 """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Organization
-from .forms import CustomUserEditForm, CustomUserCreationForm
+
+from .forms import CustomUserCreationForm, CustomUserEditForm
+from .models import Organization, User
 
 
 class CustomUserAdmin(UserAdmin):

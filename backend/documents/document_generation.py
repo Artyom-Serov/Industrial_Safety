@@ -63,7 +63,9 @@ def generate_document(examination_id, template_path, output_path):
         'certificate_number': examination.certificate_number,
         'safety_group': examination.examined.safety_group,
         'safety_officer_name': examination.commission.safety_officer_name,
-        'safety_officer_position': examination.commission.safety_officer_position,
+        'safety_officer_position': (
+            examination.commission.safety_officer_position
+        ),
         'work_experience': examination.examined.work_experience,
         'next_check_date': examination.next_check_date.strftime('%d.%m.%Y'),
         'briefings_name': examination.briefing.name

@@ -2,7 +2,7 @@
 Модуль моделей управления проверками.
 """
 from django.db import models
-from users.models import User, Organization
+from users.models import Organization, User
 
 
 class Commission(models.Model):

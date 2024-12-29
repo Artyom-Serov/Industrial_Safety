@@ -1,10 +1,9 @@
+from datetime import date
+
 import pytest
 from django.urls import reverse
-from facility.models import (
-    Examination, Examined, Commission, Briefing, Course
-)
-from users.models import User, Organization
-from datetime import date
+from facility.models import Briefing, Commission, Course, Examination, Examined
+from users.models import Organization, User
 
 
 @pytest.fixture
@@ -151,7 +150,7 @@ def test_update_examination_view(client, create_superuser, create_examination):
         'safety_officer_position': "Электрик"
     }
     response = client.post(url, data)
-    assert response.status_code ==302
+    assert response.status_code == 302
     updated_examination = Examination.objects.get(id=create_examination.id)
     assert updated_examination.protocol_number == '456/2024'
 
