@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% if user.is_superuser %}
+  <!-- Для администратора -->
   <h2 align="center">Список всех пользователей</h2>
     <div class="container">
     {% for user in users %}
@@ -22,8 +23,10 @@
         <a href="{% url 'users:register' %}">Добавить пользователя</a>
       </button>
     </div>
-
+  <!-- Подключение пагинации -->
+  {% include 'users/includes/paginator.html' %}
   {% else %}
+  <!-- Для всех зарегистрированных пользователей -->
   <h2 align="center">Информация о пользователе</h2>
   <div class="container">
     <div class="item">

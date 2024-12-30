@@ -5,6 +5,15 @@
     font-style: normal;
 }
 
+@media (max-width: 768px) {
+    .pagination {
+        flex-wrap: wrap; /* Перенос строк для мобильных */
+    }
+    .page-link {
+        padding: 8px 12px; /* Уменьшенные отступы */
+    }
+}
+
 body {
     /*font-family: 'GOST_Font', sans-serif; */
     display: flex;
@@ -143,7 +152,7 @@ form select {
     padding: 8px; /* Отступы внутри поля */
     border: 2px solid #40E0D0; /* Цвет рамки */
     border-radius: 5px; /* Скругленные углы */
-    background-color: #f8f9fa; /* Светлый фон */
+    background-color: #f8f9fa; /* Цвет фона */
     color: #333; /* Цвет текста */
     outline: none; /* Убираем стандартное выделение */
     cursor: pointer; /* Курсор при наведении */
@@ -256,3 +265,46 @@ form input[type="date"]::-moz-focus-inner {
     margin-left: 2px; /* Легкий отступ слева */
 }
 
+/* Стили для паджинации */
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Центрирование */
+    margin: 20px 0;
+}
+.pagination {
+    display: flex;
+    justify-content: center; /* Центрируем пагинацию */
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0;
+    margin: 20px 0;
+}
+.page-item {
+    margin: 0 5px; /* Расстояние между элементами */
+}
+.page-link {
+    display: block;
+    padding: 8px 12px;
+    background-color: #008B8B; /* Фоновый цвет */
+    color: white; /* Цвет текста */
+    border: 2px solid #2F4F4F; /* Цвет рамки */
+    text-decoration: none; /* Убираем подчеркивание */
+    border-radius: 5px; /* Скругленные углы */
+    transition: background-color 0.3s ease;
+}
+.page-link:hover {
+    border-color: #20B2AA; /* Изменение цвета рамки */
+    background-color: #00CED1; /* Цвет при наведении */
+}
+.page-item.active .page-link {
+    background-color: #00CED1; /* Темный оттенок при нажатии */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшение тени для эффекта нажатия */
+    transform: scale(0.90); /* Легкое уменьшение размера кнопки */
+    font-weight: bold; /* Жирный шрифт для выделения */
+    cursor: default; /* Убираем указатель мыши */
+    pointer-events: none; /* Запрещаем клики */
+}
+.page-item.disabled .page-link {
+    background-color: #d3d3d3; /* Цвет отключенных ссылок */
+    color: #808080; /* Цвет текста для отключенных */
+    cursor: not-allowed; /* Указываем недоступность */
+}
