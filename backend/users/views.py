@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CustomUserCreationForm, CustomUserEditForm
@@ -74,9 +75,14 @@ def user_profile(request):
         if not users:
             users = User.objects.all()
             cache.set('all_users', users, timeout=settings.CACHE_TTL)
+        paginator = Paginator(users, settings.DISPLAY_COUNT)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     else:
-        users = None
-    return render(request, template, {'user': request.user, 'users': users})
+        page_obj = None
+    return render(
+        request, template, {'user': request.user, 'users': page_obj}
+    )
 
 
 @login_required

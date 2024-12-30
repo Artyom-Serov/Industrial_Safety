@@ -1,0 +1,34 @@
+{% comment %}
+ Блок управления пагинацией
+{% endcomment %}
+<div class="pagination-container">
+<ul class="pagination">
+  {% if users.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page=1">Первая</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ users.previous_page_number }}">Предыдущая</a>
+    </li>
+  {% endif %}
+  {% for i in users.paginator.page_range %}
+    {% if users.number == i %}
+      <li class="page-item active">
+        <span class="page-link">{{ i }}</span>
+      </li>
+    {% else %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+  {% if users.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ users.next_page_number }}">Следующая</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ users.paginator.num_pages }}">Последняя</a>
+    </li>
+  {% endif %}
+</ul>
+</div>
