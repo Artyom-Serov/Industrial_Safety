@@ -34,6 +34,7 @@ class IndexView(LoginRequiredMixin, ListView):
     template_name = 'facility/index.html'
     context_object_name = 'examinations'
     ordering = ['-created_at']
+    paginate_by = settings.DISPLAY_COUNT
 
     def get_queryset(self):
         """

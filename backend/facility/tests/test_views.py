@@ -1,6 +1,8 @@
 from datetime import date
 
 import pytest
+from django.conf import settings
+from django.core.cache import cache
 from django.urls import reverse
 from facility.models import Briefing, Commission, Course, Examination, Examined
 from users.models import Organization, User
@@ -87,6 +89,67 @@ def test_index_view_user(client, create_user, create_examination):
 
 
 @pytest.mark.django_db
+def test_pagination_in_index_view(client, create_user):
+    """Тестирование работы пагинации списка проверок."""
+    cache.clear()
+    client.login(username=create_user.username, password='password123')
+    display_count = settings.DISPLAY_COUNT
+    total_records = display_count + 5
+    for i in range(total_records):
+        briefing = Briefing.objects.create(name="Первичный")
+        course = Course.objects.create(
+            course_number='001', course_name="Машинист крана автомобильного"
+        )
+        commission = Commission.objects.create(
+            chairman_name=f"Член {i}",
+            chairman_position="Директор",
+            member1_name=f"Петров {i}",
+            member1_position="Главный инженер",
+            member2_name=f"Сидоров {i}",
+            member2_position="Техник",
+            safety_officer_name=f"Анна {i}",
+            safety_officer_position="Электрик"
+        )
+        examined = Examined.objects.create(
+            full_name=f"Тестируемый {i}",
+            position="Инженер",
+            brigade=f"Цех №{i}",
+            safety_group='III',
+            work_experience="5 лет",
+            user=create_user
+        )
+        Examination.objects.create(
+            current_check_date=date(2024, 1, 15),
+            next_check_date=date(2025, 1, 15),
+            protocol_number=f'123/2024-{i}',
+            reason="Повторная",
+            briefing=briefing,
+            course=course,
+            commission=commission,
+            examined=examined,
+        )
+
+    cache.clear()
+    url = reverse('facility:index')
+    response = client.get(url)
+    assert response.status_code == 200
+    assert len(response.context['examinations']) == display_count
+    assert response.context['is_paginated'] is True
+    assert response.context['page_obj'].number == 1
+
+    response = client.get(url + '?page=2')
+    assert response.status_code == 200
+
+    remaining_items = total_records - display_count
+    assert len(
+        response.context['examinations']
+    ) == min(
+        display_count, remaining_items
+    )
+    assert response.context['page_obj'].number == 2
+
+
+@pytest.mark.django_db
 def test_create_examination_view(client, create_user, create_superuser):
     """Тестирование создания новой проверки."""
     client.login(username=create_superuser.username, password='adminpassword')
@@ -151,6 +214,7 @@ def test_update_examination_view(client, create_superuser, create_examination):
     }
     response = client.post(url, data)
     assert response.status_code == 302
+
     updated_examination = Examination.objects.get(id=create_examination.id)
     assert updated_examination.protocol_number == '456/2024'
 
