@@ -66,35 +66,24 @@ class IndexView(ListView):
                 queryset = Examination.objects.filter(
                     examined__company_name=user.organization
                 )
-
-            current_check_date = self.request.GET.get('current_check_date')
-            next_check_date = self.request.GET.get('next_check_date')
-            course_number = self.request.GET.get('course_number')
-            course_name = self.request.GET.get('course_name')
-            brigade = self.request.GET.get('brigade')
+            filters = {
+                'current_check_date': self.request.GET.get(
+                    'current_check_date'
+                ),
+                'next_check_date': self.request.GET.get('next_check_date'),
+                'course__course_number__icontains': self.request.GET.get(
+                    'course_number'
+                ),
+                'course__course_name__icontains': self.request.GET.get(
+                    'course_name'
+                ),
+                'examined__brigade__icontains': self.request.GET.get(
+                    'brigade'
+                ),
+            }
+            filters = {key: value for key, value in filters.items() if value}
+            queryset = queryset.filter(**filters)
             order_by = self.request.GET.get('order_by', '-created_at')
-
-            if current_check_date:
-                queryset = queryset.filter(
-                    current_check_date=current_check_date
-                )
-            if next_check_date:
-                queryset = queryset.filter(
-                    next_check_date=next_check_date
-                )
-            if course_number:
-                queryset = queryset.filter(
-                    course__course_number__icontains=course_number
-                )
-            if course_name:
-                queryset = queryset.filter(
-                    course__course_name__icontains=course_name
-                )
-            if brigade:
-                queryset = queryset.filter(
-                    examined__brigade__icontains=brigade
-                )
-
             queryset = queryset.order_by(order_by)
             cache.set(cache_key, queryset, timeout=settings.CACHE_TTL)
 
