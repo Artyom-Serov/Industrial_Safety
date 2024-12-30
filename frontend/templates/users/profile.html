@@ -24,7 +24,9 @@
       </button>
     </div>
   <!-- Подключение пагинации -->
-  {% include 'users/includes/paginator.html' %}
+  {% if is_paginated %}
+    {% include 'users/includes/paginator.html' %}
+  {% endif %}
   {% else %}
   <!-- Для всех зарегистрированных пользователей -->
   <h2 align="center">Информация о пользователе</h2>
