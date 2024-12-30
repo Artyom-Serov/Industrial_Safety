@@ -3,16 +3,16 @@
 """
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from .forms import ExaminationCreateForm, ExaminationUpdateForm
 from .models import Examination
 
 
-class IndexView(ListView):
+class IndexView(LoginRequiredMixin, ListView):
     """
     Представление для отображения списка всех проверок. Отображает все
     записи для суперпользователей и только связанные с организацией
@@ -90,8 +90,7 @@ class IndexView(ListView):
         return queryset
 
 
-@login_required
-def create_examination(request):
+class ExaminationCreateView(LoginRequiredMixin, CreateView):
     """
     Представление для создания новой проверки. Обрабатывает форму создания
     проверки, сохраняет данные в базе данных и перенаправляет пользователя
@@ -101,23 +100,26 @@ def create_examination(request):
         - request: Объект запроса, содержащий данные формы.
 
     Возвращает:
-        - render: Отображает форму для создания проверки или перенаправляет
+            - render: Отображает форму для создания проверки или перенаправляет
                   на страницу со списком проверок после успешного сохранения.
     """
-    template = 'facility/examination_create_form.html'
-    if request.method == 'POST':
-        form = ExaminationCreateForm(request.POST, user=request.user)
-        if form.is_valid():
-            form.save()
-            cache.delete('examinations_*')
-            return redirect('facility:index')
-    else:
-        form = ExaminationCreateForm(user=request.user)
-    return render(request, template, {'form': form})
+    model = Examination
+    form_class = ExaminationCreateForm
+    template_name = 'facility/examination_create_form.html'
+    success_url = reverse_lazy('facility:index')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        cache.delete('examinations_*')
+        return response
 
 
-@login_required
-def update_examination(request, pk):
+class ExaminationUpdateView(LoginRequiredMixin, UpdateView):
     """
     Представление для обновления существующей проверки. Загружает текущую
     запись проверки, обрабатывает форму обновления и сохраняет изменения.
@@ -132,21 +134,18 @@ def update_examination(request, pk):
         - render: Отображает форму для обновления проверки или перенаправляет
                   на страницу со списком проверок после успешного сохранения.
     """
-    examination = get_object_or_404(Examination, pk=pk)
-    template = 'facility/examination_update_form.html'
-    if request.method == 'POST':
-        form = ExaminationUpdateForm(request.POST, instance=examination)
-        if form.is_valid():
-            form.save()
-            cache.delete('examinations_*')
-            return redirect('facility:index')
-    else:
-        form = ExaminationUpdateForm(instance=examination)
-    return render(request, template, {'form': form})
+    model = Examination
+    form_class = ExaminationUpdateForm
+    template_name = 'facility/examination_update_form.html'
+    success_url = reverse_lazy('facility:index')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        cache.delete('examinations_*')
+        return response
 
 
-@login_required
-def delete_examination(request, pk):
+class ExaminationDeleteView(LoginRequiredMixin, DeleteView):
     """
     Представление для удаления проверки. Получает объект проверки по
     указанному первичному ключу, подтверждает удаление и удаляет запись
@@ -162,10 +161,11 @@ def delete_examination(request, pk):
             перенаправляет на страницу со списком проверок после
             успешного удаления.
     """
-    examination = get_object_or_404(Examination, pk=pk)
-    template = 'facility/examination_confirm_delete.html'
-    if request.method == 'POST':
-        examination.delete()
+    model = Examination
+    template_name = 'facility/examination_confirm_delete.html'
+    success_url = reverse_lazy('facility:index')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
         cache.delete('examinations_*')
-        return redirect('facility:index')
-    return render(request, template, {'examination': examination})
+        return response
