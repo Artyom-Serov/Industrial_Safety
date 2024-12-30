@@ -1,4 +1,6 @@
 import pytest
+from django.conf import settings
+from django.core.paginator import Page
 from django.urls import reverse
 from users.models import Organization, User
 
@@ -81,6 +83,31 @@ def test_user_profile(client_with_logged_in_user):
     response = client_with_logged_in_user.get(url)
     assert response.status_code == 200
     assert "Имя пользователя: testuser" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_user_profile_pagination(client_with_logged_in_admin, organization):
+    """Тест паджинации профилей пользователей для суперпользователя."""
+    for i in range(15):
+        User.objects.create_user(
+            username=f'user{i}',
+            email=f'user{i}@example.com',
+            password=f'password{i}23'
+        )
+    url = reverse('users:profile')
+    response = client_with_logged_in_admin.get(url)
+    assert response.status_code == 200
+    assert 'users' in response.context
+    page_obj = response.context['users']
+    assert isinstance(page_obj, Page)
+    assert page_obj.number == 1
+    assert page_obj.paginator.num_pages > 1
+    assert len(page_obj.object_list) == settings.DISPLAY_COUNT
+    response_page_2 = client_with_logged_in_admin.get(url + '?page=2')
+    assert response_page_2.status_code == 200
+    page_obj_2 = response_page_2.context['users']
+    assert page_obj_2.number == 2
+    assert len(page_obj_2.object_list) > 0
 
 
 @pytest.mark.django_db
