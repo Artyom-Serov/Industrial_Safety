@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Custom 403{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="item" align="center">
+    <h1>Ошибка 403</h1>
+    <p>У вас нет прав для доступа к {{ path }}</p>
+  </div>
+</div>
+{% endblock %}

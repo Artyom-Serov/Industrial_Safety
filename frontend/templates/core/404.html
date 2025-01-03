@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Custom 404{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="item" align="center">
+    <h1>Ошибка 404</h1>
+    <p>Страницы с адресом {{ path }} не существует</p>
+    <a href="{% url 'facility:index' %}">Перейдите на главную страницу</a>
+  </div>
+</div>
+{% endblock %}

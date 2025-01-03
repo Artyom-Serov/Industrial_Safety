@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'facility.apps.FacilityConfig',
     'documents.apps.DocumentsConfig',
+    'core.apps.CoreConfig'
 ]
 
 MIDDLEWARE = [
