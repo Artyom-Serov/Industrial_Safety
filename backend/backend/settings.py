@@ -117,7 +117,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'collected_static'
 # заглушить следующую строку при упаковке в docker
-STATICFILES_DIRS = [BASE_DIR.parent / 'frontend/static']
+# STATICFILES_DIRS = [BASE_DIR.parent / 'frontend/static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
