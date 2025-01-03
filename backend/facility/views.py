@@ -3,8 +3,9 @@
 """
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -12,7 +13,7 @@ from .forms import ExaminationCreateForm, ExaminationUpdateForm
 from .models import Examination
 
 
-class IndexView(LoginRequiredMixin, ListView):
+class IndexView(ListView):
     """
     Представление для отображения списка всех проверок. Отображает все
     записи для суперпользователей и только связанные с организацией
@@ -120,7 +121,9 @@ class ExaminationCreateView(LoginRequiredMixin, CreateView):
         return response
 
 
-class ExaminationUpdateView(LoginRequiredMixin, UpdateView):
+class ExaminationUpdateView(LoginRequiredMixin,
+                            UserPassesTestMixin,
+                            UpdateView):
     """
     Представление для обновления существующей проверки. Загружает текущую
     запись проверки, обрабатывает форму обновления и сохраняет изменения.
@@ -140,13 +143,25 @@ class ExaminationUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'facility/examination_update_form.html'
     success_url = reverse_lazy('facility:index')
 
+    def test_func(self):
+        """Проверяет, что пользователь является администратором или
+        создателем записи."""
+        obj = self.get_object()
+        return (self.request.user.is_superuser or obj.examined.user ==
+                self.request.user)
+
+    def handle_no_permission(self):
+        """Если доступ запрещён, перенаправляем на кастомную страницу 403."""
+        raise PermissionDenied
+
     def form_valid(self, form):
         response = super().form_valid(form)
         cache.delete('examinations_*')
         return response
 
 
-class ExaminationDeleteView(LoginRequiredMixin, DeleteView):
+class ExaminationDeleteView(LoginRequiredMixin,
+                            UserPassesTestMixin, DeleteView):
     """
     Представление для удаления проверки. Получает объект проверки по
     указанному первичному ключу, подтверждает удаление и удаляет запись
@@ -165,6 +180,17 @@ class ExaminationDeleteView(LoginRequiredMixin, DeleteView):
     model = Examination
     template_name = 'facility/examination_confirm_delete.html'
     success_url = reverse_lazy('facility:index')
+
+    def test_func(self):
+        """Проверяет, что пользователь является администратором или
+        создателем записи."""
+        obj = self.get_object()
+        return (self.request.user.is_superuser or obj.examined.user ==
+                self.request.user)
+
+    def handle_no_permission(self):
+        """Если доступ запрещён, перенаправляем на кастомную страницу 403."""
+        raise PermissionDenied
 
     def form_valid(self, form):
         response = super().form_valid(form)
