@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 align="center">Удаление профиля пользователя</h1>
+<div class="container">
+  <div class="item">
+    <p>Вы уверены, что хотите удалить эту запись?</p>
+    <form method="post">
+      {% csrf_token %}
+        <button type="submit">Удалить</button>
+        <button>
+          <a href="{% url 'users:profile' %}">Отмена</a>
+        </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

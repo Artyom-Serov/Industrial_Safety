@@ -1,18 +1,25 @@
 from django.urls import path
 
-from . import views
+from .views import (AdminDeleteUserView, AdminEditUserProfileView,
+                    EditProfileView, UserLoginView, UserLogoutView,
+                    UserProfileView, UserRegisterView)
 
 app_name = 'users'
 
 urlpatterns = [
-    path('login/', views.user_login, name='login'),
-    path('profile/', views.user_profile, name='profile'),
-    path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('profile/edit/', EditProfileView.as_view(), name='edit_profile'),
     path(
         'profile/edit/<int:user_id>/',
-        views.admin_edit_user_profile,
+        AdminEditUserProfileView.as_view(),
         name='edit_user_profile'
     ),
-    path('register/', views.user_register, name='register'),
-    path('logout/', views.user_logout, name='logout'),
+    path(
+        'profile/delete/<int:user_id>/',
+        AdminDeleteUserView.as_view(),
+        name='delete_user'
+    ),
+    path('register/', UserRegisterView.as_view(), name='register'),
+    path('logout/', UserLogoutView.as_view(), name='logout'),
 ]

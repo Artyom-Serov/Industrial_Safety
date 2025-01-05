@@ -4,7 +4,7 @@
   <!-- Для администратора -->
   <h2 align="center">Список всех пользователей</h2>
     <div class="container">
-    {% for user in users %}
+    {% for user in page_obj %}
       <div class="item">
         <p>Наименование организации: {{ user.organization.name }}</p>
         <p>Имя пользователя: {{ user.username }}</p>
@@ -14,19 +14,20 @@
         <button type="button">
           <a href="{% url 'users:edit_user_profile' user.id %}">Редактировать</a>
         </button>
+        <button type="button">
+          <a href="{% url 'users:delete_user' user.id %}">Удалить</a>
+        </button>
       </div>
     {% endfor %}
     </div>
+    <!-- Подключение пагинации -->
+    {% include 'users/includes/paginator.html' %}
     <div class="container" style="align-items: center;">
       <p>
       <button>
         <a href="{% url 'users:register' %}">Добавить пользователя</a>
       </button>
     </div>
-  <!-- Подключение пагинации -->
-  {% if is_paginated %}
-    {% include 'users/includes/paginator.html' %}
-  {% endif %}
   {% else %}
   <!-- Для всех зарегистрированных пользователей -->
   <h2 align="center">Информация о пользователе</h2>

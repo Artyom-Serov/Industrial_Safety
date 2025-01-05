@@ -86,8 +86,8 @@ def test_user_profile(client_with_logged_in_user):
 
 
 @pytest.mark.django_db
-def test_user_profile_pagination(client_with_logged_in_admin, organization):
-    """Тест паджинации профилей пользователей для суперпользователя."""
+def test_user_profile_pagination(client_with_logged_in_admin):
+    """Тест пагинации профилей пользователей для суперпользователя."""
     for i in range(15):
         User.objects.create_user(
             username=f'user{i}',
@@ -97,15 +97,15 @@ def test_user_profile_pagination(client_with_logged_in_admin, organization):
     url = reverse('users:profile')
     response = client_with_logged_in_admin.get(url)
     assert response.status_code == 200
-    assert 'users' in response.context
-    page_obj = response.context['users']
+    assert 'page_obj' in response.context
+    page_obj = response.context['page_obj']
     assert isinstance(page_obj, Page)
     assert page_obj.number == 1
     assert page_obj.paginator.num_pages > 1
     assert len(page_obj.object_list) == settings.DISPLAY_COUNT
     response_page_2 = client_with_logged_in_admin.get(url + '?page=2')
     assert response_page_2.status_code == 200
-    page_obj_2 = response_page_2.context['users']
+    page_obj_2 = response_page_2.context['page_obj']
     assert page_obj_2.number == 2
     assert len(page_obj_2.object_list) > 0
 
@@ -179,6 +179,46 @@ def test_user_register_with_new_organization(client_with_logged_in_admin):
     assert new_user is not None
     assert new_organization is not None
     assert new_user.organization == new_organization
+
+
+@pytest.mark.django_db
+def test_admin_delete_user(client_with_logged_in_admin, regular_user):
+    """Тест удаления пользователя администратором."""
+    url = reverse('users:delete_user', args=[regular_user.id])
+    response = client_with_logged_in_admin.get(url)
+    assert response.status_code == 200
+    assert ("Вы уверены, что хотите удалить эту запись?" in
+            response.content.decode())
+    response = client_with_logged_in_admin.post(url)
+    assert response.status_code == 302
+    assert response.url == reverse('users:profile')
+    assert not User.objects.filter(id=regular_user.id).exists()
+
+
+@pytest.mark.django_db
+def test_regular_user_cannot_delete_user(client_with_logged_in_user,
+                                         regular_user):
+    """Тест отсутствия возможности у обычного пользователя
+    удалять других пользователей."""
+    url = reverse('users:delete_user', args=[regular_user.id])
+    response = client_with_logged_in_user.get(url)
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_admin_cannot_delete_self(client_with_logged_in_admin, admin_user):
+    """Тест отсутствия возможности у администратора удалить самого себя."""
+    url = reverse('users:delete_user', args=[admin_user.id])
+    response = client_with_logged_in_admin.post(url)
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_delete_nonexistent_user(client_with_logged_in_admin):
+    """Тест удаления несуществующего пользователя."""
+    url = reverse('users:delete_user', args=[9999])
+    response = client_with_logged_in_admin.post(url)
+    assert response.status_code == 404
 
 
 @pytest.mark.django_db
