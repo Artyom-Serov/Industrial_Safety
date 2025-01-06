@@ -50,6 +50,7 @@ jobs:
           flake8 --count .
           pytest backend/
 
+
   build_frontend_and_push_to_docker_hub:
     name: Push frontend Docker image to DockerHub
     runs-on: ubuntu-latest
@@ -70,6 +71,7 @@ jobs:
           context: ./frontend/
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/industrial_safety_frontend:latest
+
 
   build_backend_and_push_to_docker_hub:
     name: Push backend Docker image to DockerHub
