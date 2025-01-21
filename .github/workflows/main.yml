@@ -115,22 +115,18 @@ jobs:
     name: Deploy on server
     runs-on: ubuntu-latest
     needs:
-#       Дождёмся билда всех образов
       - build_frontend_and_push_to_docker_hub
       - build_backend_and_push_to_docker_hub
       - build_web_and_push_to_docker_hub
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-#       Копируем docker-compose.production.yml на продакшен-сервер
       - name: Copy docker-compose.yml via ssh
         uses: appleboy/scp-action@master
-#        Передаём параметры для action appleboy/scp-action:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-#          passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "docker-compose.production.yml"
           target: "industrial_safety"
       - name: Executing remote ssh commands to deploy
@@ -139,10 +135,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-#         passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          # Параметр script передаёт в action appleboy/ssh-action команды,
-          # которые нужно выполнить на сервере,
-          # с которым установлено соединение
           script: |
             cd industrial_safety
             sudo docker compose -f docker-compose.production.yml pull
@@ -161,4 +153,4 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Деплой "Industrial Safety" успешно выполнен!
+          message: Деплой изменений "Industrial Safety" успешно выполнен!
